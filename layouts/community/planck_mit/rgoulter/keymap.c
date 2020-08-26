@@ -2,6 +2,8 @@
 #include "action_layer.h"
 #include "eeconfig.h"
 
+#include "raw_hid.h"
+
 extern keymap_config_t keymap_config;
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
@@ -186,4 +188,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
   }
   return true;
+}
+
+// RAW_EPSIZE is 32
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    raw_hid_send(data, length);
 }

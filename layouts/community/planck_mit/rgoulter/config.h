@@ -3,4 +3,7 @@
 /* Uses 'held' key in sequence like "TH-DOWN, X-DOWN, TH-UP, X-UP".
  * (Default behaviour would be 'tap').
  */
-#define PERMISSIVE_HOLD
+// #define PERMISSIVE_HOLD
+
+/* Necessary for home-row mods */
+#define IGNORE_MOD_TAP_INTERRUPT

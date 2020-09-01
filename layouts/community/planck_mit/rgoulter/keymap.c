@@ -43,18 +43,43 @@ enum custom_keycodes {
 #define LCTLT_E LCTL_T(KC_E)
 #define LSFTT_U LSFT_T(KC_U)
 
+/* Home Row Mods, QWERTY, LH */
+#define LSFTT_F LSFT_T(KC_F)
+
+/* Lower Row Mods, Dvorak, LH */
+#define LGUIT_Q LGUI_T(KC_Q)
+#define LALTT_J LALT_T(KC_J)
+#define LCTLT_K LCTL_T(KC_K)
+
+/* Lower Row Mods, QWERTY, LH */
+#define LGUIT_X LGUI_T(KC_X)
+#define LALTT_C LALT_T(KC_C)
+#define LCTLT_V LCTL_T(KC_V)
+
 /* Home Row Mods, Dvorak, RH */
 #define RSFTT_H RSFT_T(KC_H)
 #define RCTLT_T RCTL_T(KC_T)
 #define RALTT_N RALT_T(KC_N)
 #define RGUIT_S RGUI_T(KC_S)
 
+/* Home Row Mods, QWERTY, RH */
+#define RSFTT_J RSFT_T(KC_J)
+
+/* Lower Row Mods, Dvorak, RH */
+#define RCTLT_M RCTL_T(KC_M)
+#define RALTT_W RALT_T(KC_W)
+#define RGUIT_V RGUI_T(KC_V)
+
+/* Lower Row Mods, QWERTY, RH */
+#define RA_COMM RALT_T(KC_COMM)
+#define RG_DOT  RGUI_T(KC_DOT)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_QWERTY] = LAYOUT_planck_mit( \
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
-  LCTLESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, RCTLENT, \
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_QUOT, KC_RSFT, \
+  LCTLESC, KC_A,    KC_S,    KC_D,    LSFTT_F, KC_G,    KC_H,    RSFTT_J, KC_K,    KC_L,    KC_SCLN, RCTLENT, \
+  KC_LSFT, KC_Z,    LGUIT_X, LALTT_C, LCTLT_V, KC_B,    KC_N,    RCTLT_M, RA_COMM, RG_DOT,  KC_QUOT, KC_RSFT, \
   ADJUST,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,      KC_SPC,        RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
 ),
 
@@ -67,8 +92,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_DVORAK] = LAYOUT_planck_mit( \
   KC_TAB,  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,    KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_BSPC, \
-  LCTLESC, LGUIT_A, LALTT_O, LCTLT_E, LSFTT_U, KC_I,    KC_D,    RSFTT_H, RCTLT_T, RALTT_N, RGUIT_S, RCTLENT, \
-  KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT, \
+  LCTLESC, KC_A,    KC_O,    KC_E,    LSFTT_U, KC_I,    KC_D,    RSFTT_H, KC_T,    KC_N,    KC_S,    RCTLENT, \
+  KC_LSFT, KC_SCLN, LGUIT_Q, LALTT_J, LCTLT_K, KC_X,    KC_B,    RCTLT_M, RALTT_W, RGUIT_V, KC_Z,    KC_RSFT, \
   ADJUST,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,      KC_SPC,        RAISE,   KC_RGUI, KC_RALT, KC_RCTL, NUMPAD \
 ),
 

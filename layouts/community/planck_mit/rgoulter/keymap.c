@@ -2,33 +2,31 @@
 #include "action_layer.h"
 #include "eeconfig.h"
 
-#include "raw_hid.h"
-
 extern keymap_config_t keymap_config;
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
-#define _QWERTY 0
-#define _COLEMAK 1
-#define _DVORAK 2
-#define _LOWER 3
-#define _RAISE 4
-#define _CHILDPROOF 5
-#define _NUMPAD 6
-#define _ADJUST 16
-
-enum custom_keycodes {
-  QWERTY = SAFE_RANGE,
-  COLEMAK,
-  DVORAK,
-  LOWER,
-  RAISE,
-  NUMPAD,
-  CHILDPROOF,
-  ADJUST,
+enum layers {
+  _QWERTY,
+  _COLEMAK,
+  _DVORAK,
+  _LOWER,
+  _RAISE,
+  _CHILDPROOF,
+  _NUMPAD,
+  _ADJUST,
 };
+
+#define QWERTY     DF(_QWERTY)
+#define COLEMAK    DF(_COLEMAK)
+#define DVORAK     DF(_DVORAK)
+#define CHILDPROOF DF(_CHILDPROOF)
+#define LOWER   MO(_LOWER)
+#define RAISE   MO(_RAISE)
+#define NUMPAD  MO(_NUMPAD)
+#define ADJUST  MO(_ADJUST)
 
 #define GUIBSPC GUI_T(KC_BSPC)
 #define RSFTENT RSFT_T(KC_ENT)
@@ -135,99 +133,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-void persistent_default_layer_set(uint16_t default_layer) {
-  eeconfig_update_default_layer(default_layer);
-  default_layer_set(default_layer);
-}
-
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//   // switch (state) {
-//   // case _QWERTY:
-//   //   rgb_matrix_sethsv_noeeprom(HSV_RED);
-//   //   break;
-//   // case _DVORAK:
-//   //   rgb_matrix_sethsv_noeeprom(HSV_PURPLE);
-//   //   break;
-//   // case _LOWER:
-//   //   rgb_matrix_sethsv_noeeprom(HSV_GREEN);
-//   //   break;
-//   // case _RAISE:
-//   //   rgb_matrix_sethsv_noeeprom(HSV_ORANGE);
-//   //   break;
-//   // case _ADJUST:
-//   //   rgb_matrix_sethsv_noeeprom(HSV_BLUE);
-//   //   break;
-//   // }
-//   return state;
-// }
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case QWERTY:
-      if (record->event.pressed) {
-        persistent_default_layer_set(1UL<<_QWERTY);
-      }
-      return false;
-      break;
-    case COLEMAK:
-      if (record->event.pressed) {
-        persistent_default_layer_set(1UL<<_COLEMAK);
-      }
-      return false;
-      break;
-    case DVORAK:
-      if (record->event.pressed) {
-        persistent_default_layer_set(1UL<<_DVORAK);
-      }
-      return false;
-      break;
-    case LOWER:
-      if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case CHILDPROOF:
-      if (record->event.pressed) {
-        persistent_default_layer_set(1UL<<_CHILDPROOF);
-      }
-      return false;
-      break;
-    case NUMPAD:
-      if (record->event.pressed) {
-        layer_on(_NUMPAD);
-      } else {
-        layer_off(_NUMPAD);
-      }
-      return false;
-      break;
-    case ADJUST:
-      if (record->event.pressed) {
-        layer_on(_ADJUST);
-      } else {
-        layer_off(_ADJUST);
-      }
-      return false;
-      break;
-  }
-  return true;
-}
-
-// RAW_EPSIZE is 32
-void raw_hid_receive(uint8_t *data, uint8_t length) {
-    raw_hid_send(data, length);
+layer_state_t layer_state_set_user(layer_state_t state) {
+  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }

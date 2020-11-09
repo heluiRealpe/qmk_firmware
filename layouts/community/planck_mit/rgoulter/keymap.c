@@ -2,6 +2,8 @@
 #include "action_layer.h"
 #include "eeconfig.h"
 
+#include "snake.h"
+
 extern keymap_config_t keymap_config;
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
@@ -12,12 +14,26 @@ enum layers {
   _QWERTY,
   _COLEMAK,
   _DVORAK,
+  _SNAKE,
   _LOWER,
   _RAISE,
   _CHILDPROOF,
   _NUMPAD,
   _ADJUST,
 };
+
+enum custom_keycodes {
+  QUARTER = SAFE_RANGE,
+  HALF,
+  SNAKE,
+  DIRRGHT,
+  DIRUP,
+  DIRLEFT,
+  DIRDOWN
+};
+
+char quarter_count = 0;
+char half_count = 0;
 
 #define QWERTY     DF(_QWERTY)
 #define COLEMAK    DF(_COLEMAK)
@@ -95,6 +111,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ADJUST,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,      KC_SPC,        RAISE,   KC_RGUI, KC_RALT, KC_RCTL, NUMPAD \
 ),
 
+[_SNAKE] = LAYOUT_planck_mit( \
+  QUARTER, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QUARTER, \
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, HALF,    XXXXXXX, XXXXXXX, HALF,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DIRUP,   XXXXXXX, \
+  QUARTER, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,     XXXXXXX,      XXXXXXX, XXXXXXX, DIRLEFT, DIRDOWN, DIRRGHT \
+),
+
 [_LOWER] = LAYOUT_planck_mit( \
   KC_GRV,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
   KC_INS,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_QUES, \
@@ -125,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_ADJUST] =  LAYOUT_planck_mit( \
   RESET,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, RGB_SPI, RGB_SPD, _______,
-  _______, _______, _______, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK, DVORAK,  CHILDPROOF, _______, \
+  _______, _______, _______, _______, _______, AG_NORM, AG_SWAP, QWERTY,  COLEMAK, DVORAK,  CHILDPROOF, SNAKE, \
   _______, _______, _______, _______, _______, _______, _______, _______, KC_BTN1, KC_BTN2, KC_WH_D, KC_WH_U, \
   _______, _______, _______, _______, _______,     _______,      _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R \
 )
@@ -135,4 +158,67 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case DIRUP:
+      if (snake_status.last_moved_direction != DIRECTION_DOWN) {
+        snake_status.direction = DIRECTION_UP;
+      }
+      return false;
+    case DIRDOWN:
+      if (snake_status.last_moved_direction != DIRECTION_UP) {
+        snake_status.direction = DIRECTION_DOWN;
+      }
+      return false;
+    case DIRLEFT:
+      if (snake_status.last_moved_direction != DIRECTION_RIGHT) {
+        snake_status.direction = DIRECTION_LEFT;
+      }
+      return false;
+    case DIRRGHT:
+      if (snake_status.last_moved_direction != DIRECTION_LEFT) {
+         snake_status.direction = DIRECTION_RIGHT;
+      }
+
+      // corner
+      if (record->event.pressed) {
+        quarter_count += 1;
+      } else {
+        quarter_count -= 1;
+      }
+      if (quarter_count == 4) {
+        reset_keyboard();
+      }
+      return false;
+    case QUARTER:
+      // corner
+      if (record->event.pressed) {
+        quarter_count += 1;
+      } else {
+        quarter_count -= 1;
+      }
+      if (quarter_count == 4) {
+        reset_keyboard();
+      }
+      return false;
+    case HALF:
+      if (record->event.pressed) {
+        half_count += 1;
+      } else {
+        half_count -= 1;
+      }
+      if (half_count == 2) {
+        layer_move(_DVORAK);
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_MULTISPLASH);
+      }
+      return false;
+    case SNAKE:
+      layer_move(_SNAKE);
+      snake_init();
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SNAKE);
+      return false;
+  }
+  return true;
 }

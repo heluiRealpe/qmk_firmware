@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 #include "action_layer.h"
-#include "eeconfig.h"
+
+#include "raw_hid.h"
 
 #include "snake.h"
 
@@ -221,4 +222,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
   }
   return true;
+}
+
+
+// RAW_EPSIZE is 32
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    raw_hid_send(data, length);
 }

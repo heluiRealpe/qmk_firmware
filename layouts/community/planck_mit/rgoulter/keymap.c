@@ -158,7 +158,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  if (layer_state_cmp(state, _ADJUST)) {
+    // allow enabling _ADJUST other than just with _LOWER and _RAISE
+    return state;
+  } else {
+    // if both _LOWER and _RAISE layer are enabled,
+    // also enable the _ADJUST layer
+    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  }
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {

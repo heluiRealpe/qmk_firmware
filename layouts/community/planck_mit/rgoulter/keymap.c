@@ -3,7 +3,7 @@
 
 #include "raw_hid.h"
 
-// #include "snake.h"
+#include "snake.h"
 
 extern keymap_config_t keymap_config;
 
@@ -136,68 +136,68 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-// switch (keycode) {
-// case DIRUP:
-// if (snake_status.last_moved_direction != DIRECTION_DOWN) {
-// snake_status.direction = DIRECTION_UP;
-// }
-// return false;
-// case DIRDOWN:
-// if (snake_status.last_moved_direction != DIRECTION_UP) {
-// snake_status.direction = DIRECTION_DOWN;
-// }
-// return false;
-// case DIRLEFT:
-// if (snake_status.last_moved_direction != DIRECTION_RIGHT) {
-// snake_status.direction = DIRECTION_LEFT;
-// }
-// return false;
-// case DIRRGHT:
-// if (snake_status.last_moved_direction != DIRECTION_LEFT) {
-// snake_status.direction = DIRECTION_RIGHT;
-// }
-// 
-      // // corner
-      // if (record->event.pressed) {
-// quarter_count += 1;
-// } else {
-// quarter_count -= 1;
-// }
-// if (quarter_count == 4) {
-// reset_keyboard();
-// }
-// return false;
-// case QUARTER:
-      // // corner
-      // if (record->event.pressed) {
-// quarter_count += 1;
-// } else {
-// quarter_count -= 1;
-// }
-// if (quarter_count == 4) {
-// reset_keyboard();
-// }
-// return false;
-// case HALF:
-// if (record->event.pressed) {
-// half_count += 1;
-// } else {
-// half_count -= 1;
-// }
-// if (half_count == 2) {
-// layer_move(_DVORAK);
-// rgb_matrix_mode_noeeprom(RGB_MATRIX_MULTISPLASH);
-// }
-// return false;
-// case SNAKE:
-      // // layer_move(_SNAKE);
-      // // snake_init();
-      // // rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SNAKE);
-      // return false;
-// }
-// return true;
-// }
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+  case DIRUP:
+    if (snake_status.last_moved_direction != DIRECTION_DOWN) {
+      snake_status.direction = DIRECTION_UP;
+    }
+    return false;
+  case DIRDOWN:
+    if (snake_status.last_moved_direction != DIRECTION_UP) {
+      snake_status.direction = DIRECTION_DOWN;
+    }
+    return false;
+  case DIRLEFT:
+    if (snake_status.last_moved_direction != DIRECTION_RIGHT) {
+      snake_status.direction = DIRECTION_LEFT;
+    }
+    return false;
+  case DIRRGHT:
+    if (snake_status.last_moved_direction != DIRECTION_LEFT) {
+      snake_status.direction = DIRECTION_RIGHT;
+    }
+ 
+    // corner
+    if (record->event.pressed) {
+      quarter_count += 1;
+    } else {
+      quarter_count -= 1;
+    }
+    if (quarter_count == 4) {
+      reset_keyboard();
+    }
+    return false;
+  case QUARTER:
+    // corner
+    if (record->event.pressed) {
+      quarter_count += 1;
+    } else {
+      quarter_count -= 1;
+    }
+    if (quarter_count == 4) {
+      reset_keyboard();
+    }
+    return false;
+  case HALF:
+    if (record->event.pressed) {
+      half_count += 1;
+    } else {
+      half_count -= 1;
+    }
+    if (half_count == 2) {
+      layer_move(_DVORAK);
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_MULTISPLASH);
+    }
+    return false;
+  case SNAKE:
+    layer_move(_SNAKE);
+    snake_init();
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SNAKE);
+    return false;
+  }
+  return true;
+}
 
 
 // RAW_EPSIZE is 32

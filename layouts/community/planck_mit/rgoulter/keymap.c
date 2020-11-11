@@ -187,7 +187,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       if (half_count == 2) {
         layer_move(_DVORAK);
-        rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_MULTISPLASH);
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_MULTISPLASH);
       }
       return false;
     case SNAKE:

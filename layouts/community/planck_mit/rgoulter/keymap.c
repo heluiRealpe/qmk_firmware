@@ -12,8 +12,8 @@ extern keymap_config_t keymap_config;
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
 enum layers {
-  _QWERTY,
   _DVORAK,
+  _QWERTY,
   _SNAKE,
   _LOWER,
   _RAISE,
@@ -73,18 +73,18 @@ char half_count = 0;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-[_QWERTY] = LAYOUT_planck_mit( \
-  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
-  LCTLESC, LALTT_A, LGUIT_S, LCTLT_D, LSFTT_F, KC_G,    KC_H,    RSFTT_J, RCTLT_K, RGUIT_L, RALTTSC, RCTLENT, \
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_QUOT, KC_RSFT, \
-  _______, KC_LCTL, KC_LALT, KC_LGUI, LOWER,      KC_SPC,        RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
-),
-
 [_DVORAK] = LAYOUT_planck_mit( \
   KC_TAB,  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,    KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_BSPC, \
   LCTLESC, LALTT_A, LGUIT_O, LCTLT_E, LSFTT_U, KC_I,    KC_D,    RSFTT_H, RCTLT_T, RGUIT_N, RALTT_S, RCTLENT, \
   KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT, \
   _______, KC_LCTL, KC_LALT, KC_LGUI, LOWER,      KC_SPC,        RAISE,   KC_RGUI, KC_RALT, KC_RCTL, NUMPAD \
+),
+
+[_QWERTY] = LAYOUT_planck_mit( \
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
+  LCTLESC, LALTT_A, LGUIT_S, LCTLT_D, LSFTT_F, KC_G,    KC_H,    RSFTT_J, RCTLT_K, RGUIT_L, RALTTSC, RCTLENT, \
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_QUOT, KC_RSFT, \
+  _______, KC_LCTL, KC_LALT, KC_LGUI, LOWER,      KC_SPC,        RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
 ),
 
 [_SNAKE] = LAYOUT_planck_mit( \

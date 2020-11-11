@@ -3,7 +3,7 @@
 
 #include "raw_hid.h"
 
-#include "snake.h"
+// #include "snake.h"
 
 extern keymap_config_t keymap_config;
 
@@ -136,68 +136,68 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case DIRUP:
-      if (snake_status.last_moved_direction != DIRECTION_DOWN) {
-        snake_status.direction = DIRECTION_UP;
-      }
-      return false;
-    case DIRDOWN:
-      if (snake_status.last_moved_direction != DIRECTION_UP) {
-        snake_status.direction = DIRECTION_DOWN;
-      }
-      return false;
-    case DIRLEFT:
-      if (snake_status.last_moved_direction != DIRECTION_RIGHT) {
-        snake_status.direction = DIRECTION_LEFT;
-      }
-      return false;
-    case DIRRGHT:
-      if (snake_status.last_moved_direction != DIRECTION_LEFT) {
-         snake_status.direction = DIRECTION_RIGHT;
-      }
-
-      // corner
-      if (record->event.pressed) {
-        quarter_count += 1;
-      } else {
-        quarter_count -= 1;
-      }
-      if (quarter_count == 4) {
-        reset_keyboard();
-      }
-      return false;
-    case QUARTER:
-      // corner
-      if (record->event.pressed) {
-        quarter_count += 1;
-      } else {
-        quarter_count -= 1;
-      }
-      if (quarter_count == 4) {
-        reset_keyboard();
-      }
-      return false;
-    case HALF:
-      if (record->event.pressed) {
-        half_count += 1;
-      } else {
-        half_count -= 1;
-      }
-      if (half_count == 2) {
-        layer_move(_DVORAK);
-        rgb_matrix_mode_noeeprom(RGB_MATRIX_MULTISPLASH);
-      }
-      return false;
-    case SNAKE:
-      layer_move(_SNAKE);
-      snake_init();
-      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SNAKE);
-      return false;
-  }
-  return true;
-}
+// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+// switch (keycode) {
+// case DIRUP:
+// if (snake_status.last_moved_direction != DIRECTION_DOWN) {
+// snake_status.direction = DIRECTION_UP;
+// }
+// return false;
+// case DIRDOWN:
+// if (snake_status.last_moved_direction != DIRECTION_UP) {
+// snake_status.direction = DIRECTION_DOWN;
+// }
+// return false;
+// case DIRLEFT:
+// if (snake_status.last_moved_direction != DIRECTION_RIGHT) {
+// snake_status.direction = DIRECTION_LEFT;
+// }
+// return false;
+// case DIRRGHT:
+// if (snake_status.last_moved_direction != DIRECTION_LEFT) {
+// snake_status.direction = DIRECTION_RIGHT;
+// }
+// 
+      // // corner
+      // if (record->event.pressed) {
+// quarter_count += 1;
+// } else {
+// quarter_count -= 1;
+// }
+// if (quarter_count == 4) {
+// reset_keyboard();
+// }
+// return false;
+// case QUARTER:
+      // // corner
+      // if (record->event.pressed) {
+// quarter_count += 1;
+// } else {
+// quarter_count -= 1;
+// }
+// if (quarter_count == 4) {
+// reset_keyboard();
+// }
+// return false;
+// case HALF:
+// if (record->event.pressed) {
+// half_count += 1;
+// } else {
+// half_count -= 1;
+// }
+// if (half_count == 2) {
+// layer_move(_DVORAK);
+// rgb_matrix_mode_noeeprom(RGB_MATRIX_MULTISPLASH);
+// }
+// return false;
+// case SNAKE:
+      // // layer_move(_SNAKE);
+      // // snake_init();
+      // // rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SNAKE);
+      // return false;
+// }
+// return true;
+// }
 
 
 // RAW_EPSIZE is 32
@@ -208,15 +208,19 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
 enum combo_events {
   DESKTOP_GO_LEFT,
   DESKTOP_GO_RIGHT,
+  LEAD,
 };
 
 // can't be keys which have tap-hold
 const uint16_t PROGMEM dsk_lower_left_combo[] = {KC_J, KC_K, COMBO_END};
+// const uint16_t PROGMEM dsk_lower_left_combo[] = {LCTLT_E, LSFTT_U, COMBO_END};
 const uint16_t PROGMEM dsk_lower_right_combo[] = {KC_M, KC_W, COMBO_END};
+const uint16_t PROGMEM dsk_lower_lead_combo[] = {KC_Q, KC_J, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
   [DESKTOP_GO_LEFT] = COMBO_ACTION(dsk_lower_left_combo),
   [DESKTOP_GO_RIGHT] = COMBO_ACTION(dsk_lower_right_combo),
+  [LEAD] = COMBO_ACTION(dsk_lower_lead_combo),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
@@ -233,5 +237,22 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
         tap_code16(LCTL(KC_RIGHT));
       }
       break;
+    case LEAD:
+      if (pressed) {
+        qk_leader_start();
+      }
+      break;
+  }
+}
+LEADER_EXTERNS();
+
+void matrix_scan_user(void) {
+  LEADER_DICTIONARY() {
+    leading = false;
+    leader_end();
+
+    SEQ_ONE_KEY(KC_G) {
+      SEND_STRING("Archanan");
+    }
   }
 }

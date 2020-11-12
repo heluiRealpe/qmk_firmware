@@ -237,22 +237,47 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
         tap_code16(LCTL(KC_RIGHT));
       }
       break;
-    case LEAD:
-      if (pressed) {
-        qk_leader_start();
-      }
-      break;
+      //   case LEAD:
+      //     if (pressed) {
+      //       qk_leader_start();
+      //     }
+      //     break;
   }
 }
-LEADER_EXTERNS();
+// LEADER_EXTERNS();
+// 
+// void matrix_scan_user(void) {
+//   LEADER_DICTIONARY() {
+//     leading = false;
+//     leader_end();
+// 
+//     SEQ_ONE_KEY(KC_G) {
+//       SEND_STRING("Archanan");
+//     }
+//   }
+// }
 
-void matrix_scan_user(void) {
-  LEADER_DICTIONARY() {
-    leading = false;
-    leader_end();
+void rgb_matrix_indicators_user(void) {
+  uint8_t layer = get_highest_layer(layer_state);
 
-    SEQ_ONE_KEY(KC_G) {
-      SEND_STRING("Archanan");
+  // ignore default layer
+  if (layer == 0) {
+    return;
+  }
+
+  for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+    for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+      uint8_t led_index = g_led_config.matrix_co[row][col];
+      keypos_t pos = { col, row };
+      uint16_t keycode = keymap_key_to_keycode(layer, pos);
+      bool keycode_set_on_layer = keycode != KC_TRNS && keycode != KC_NO;
+      if (led_index != NO_LED && keycode_set_on_layer) {
+        rgb_matrix_set_color(led_index, 0xFF, 0x00, 0xFF);
+      }
     }
   }
+}
+
+void keyboard_post_init_user(void) {
+  rgb_matrix_mode_noeeprom(RGB_MATRIX_NONE);
 }

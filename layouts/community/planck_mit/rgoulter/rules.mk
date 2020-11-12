@@ -6,4 +6,4 @@ RAW_ENABLE = no
 
 COMBO_ENABLE = yes
 
-LEADER_ENABLE = yes
+LEADER_ENABLE = no

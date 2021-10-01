@@ -13,7 +13,9 @@ enum layers {
   _DVORAK,
   _QWERTY,
   _LOWER,
+  _LOWER2,
   _RAISE,
+  _RAISE2,
   _CHILDPROOF,
   _NUMPAD,
   _ADJUST,
@@ -38,12 +40,17 @@ char quarter_count = 0;
 #define DVORAK     DF(_DVORAK)
 #define CHILDPROOF DF(_CHILDPROOF)
 #define LOWER   MO(_LOWER)
+#define LOWER2   MO(_LOWER2)
 #define RAISE   MO(_RAISE)
+#define RAISE2   MO(_RAISE2)
 #define NUMPAD  MO(_NUMPAD)
 #define ADJUST  MO(_ADJUST)
 
-#define LWR_ESC LT(_LOWER, KC_ESC)
-#define RSE_BSP LT(_RAISE, KC_BSPC)
+#define LWR_TAB LT(_LOWER, KC_TAB)
+#define LW2_ESC LT(_LOWER2, KC_ESC)
+
+#define RS2_BSP LT(_RAISE2, KC_BSPC)
+#define RSE_ENT LT(_RAISE, KC_ENT)
 
 /* Home Row, outer column */
 #define LCTLESC LCTL_T(KC_ESC)
@@ -73,27 +80,27 @@ char quarter_count = 0;
 #define RGUIT_L RGUI_T(KC_L)
 #define RALTTSC RALT_T(KC_SCLN)
 
+#define ___BASE_BOTTOM_ROW___ \
+  _______, _______, _______, LWR_TAB, LW2_ESC,    KC_SPC,      RS2_BSPC,    RSE_ENT, _______, _______, _______
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // XXX: find place for the PrtScr, ScrlLck, Pause keys;
 // XXX: aim for one-handed numpad?
 // XXX: aim for one-handed cursor keys?
 
-  // KC_TAB,  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,    KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_BSPC,
-  // LCTLESC, LALTT_A, LGUIT_O, LCTLT_E, LSFTT_U, KC_I,    KC_D,    RSFTT_H, RCTLT_T, RGUIT_N, RALTT_S, RCTLENT,
-  // KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
 [_DVORAK] = LAYOUT_planck_mit( \
   KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y, KC_TAB,     KC_BSPC, KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    \
   LALTT_A, LGUIT_O, LCTLT_E, LSFTT_U, KC_I, LCTLESC,    RCTLENT, KC_D,    RSFTT_H, RCTLT_T, RGUIT_N, RALTT_S, \
   KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X, _______,    _______, KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    \
-  _______, _______, _______, KC_TAB,  LWR_ESC,   KC_SPC,      RSE_BSP,    KC_ENT, _______, _______, _______ \
+                                           ___BASE_BOTTOM_ROW___ \
 ),
 
 [_QWERTY] = LAYOUT_planck_mit( \
   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, KC_TAB,     KC_BSPC, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
   LALTT_A, LGUIT_S, LCTLT_D, LSFTT_F, KC_G, LCTLESC,    RCTLENT, KC_H,    RSFTT_J, RCTLT_K, RGUIT_L, RALTTSC, \
   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, _______,    _______, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_QUOT, \
-  _______, _______, _______, KC_TAB,  LWR_ESC,   KC_SPC,      RSE_BSP,    KC_ENT, _______, _______, _______ \
+                                           ___BASE_BOTTOM_ROW___ \
 ),
 
 // XXX: Let's ... move the function keys elsewhere?
@@ -105,11 +112,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______, _______,     _______,      _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
 ),
 
+[_LOWER2] = LAYOUT_planck_mit( \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______ \
+),
+
 [_RAISE] = LAYOUT_planck_mit( \
   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_TILD, KC_BSLS, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    \
   _______, _______, _______, _______, _______, KC_DEL,  KC_SLSH, _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, \
   _______, KC_CUT,  KC_COPY, KC_PSTE, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______,    _______,       _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY \
+),
+
+[_RAISE2] = LAYOUT_planck_mit( \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______ \
 ),
 
 [_CHILDPROOF] = LAYOUT_planck_mit( \
@@ -128,11 +149,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_ADJUST] =  LAYOUT_planck_mit( \
   RESET,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, RGB_SPI, RGB_SPD, _______,
-  _______, _______, _______, _______, _______, _______, _______, QWERTY,  XXXXXXX, DVORAK,  CHILDPROOF, _______, \
+  _______, _______, _______, _______, _______, _______, _______, QWERTY,  XXXXXXX, DVORAK,  CHILDPROOF, XXXXXXX, \
   _______, _______, _______, _______, _______, _______, _______, _______, KC_BTN1, KC_BTN2, KC_WH_D, KC_WH_U, \
   _______, _______, _______, _______, _______,     _______,      _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R \
 )
-
 
 };
 

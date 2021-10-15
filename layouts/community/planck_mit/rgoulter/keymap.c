@@ -81,7 +81,9 @@ char quarter_count = 0;
 #define RALTTSC RALT_T(KC_SCLN)
 
 #define ___BASE_BOTTOM_ROW___ \
-  _______, _______, _______, LWR_TAB, LW2_ESC,    KC_SPC,      RS2_BSPC,    RSE_ENT, _______, _______, _______
+  _______, _______, _______, LWR_TAB, LW2_ESC,    KC_SPC,      RS2_BSP,    RSE_ENT, _______, _______, _______
+
+#define LAYOUT_wrapper(...)            LAYOUT_planck_mit(__VA_ARGS__)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -89,14 +91,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // XXX: aim for one-handed numpad?
 // XXX: aim for one-handed cursor keys?
 
-[_DVORAK] = LAYOUT_planck_mit( \
+[_DVORAK] = LAYOUT_wrapper( \
   KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y, KC_TAB,     KC_BSPC, KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    \
   LALTT_A, LGUIT_O, LCTLT_E, LSFTT_U, KC_I, LCTLESC,    RCTLENT, KC_D,    RSFTT_H, RCTLT_T, RGUIT_N, RALTT_S, \
   KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X, _______,    _______, KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    \
                                            ___BASE_BOTTOM_ROW___ \
 ),
 
-[_QWERTY] = LAYOUT_planck_mit( \
+[_QWERTY] = LAYOUT_wrapper( \
   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, KC_TAB,     KC_BSPC, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
   LALTT_A, LGUIT_S, LCTLT_D, LSFTT_F, KC_G, LCTLESC,    RCTLENT, KC_H,    RSFTT_J, RCTLT_K, RGUIT_L, RALTTSC, \
   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, _______,    _______, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_QUOT, \

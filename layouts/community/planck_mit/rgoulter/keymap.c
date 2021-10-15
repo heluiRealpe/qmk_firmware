@@ -58,16 +58,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // XXX: aim for one-handed cursor keys?
 
 [_DVORAK] = LAYOUT_wrapper( \
-  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y, KC_TAB,     KC_BSPC, KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    \
-  LALTT_A, LGUIT_O, LCTLT_E, LSFTT_U, KC_I, LCTLESC,    RCTLENT, KC_D,    RSFTT_H, RCTLT_T, RGUIT_N, RALTT_S, \
-  KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X, _______,    _______, KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    \
+  ___SEG5_DVORAK_LHS_1___, KC_TAB,     KC_BSPC, ___SEG5_DVORAK_RHS_1___,    \
+  ___SEG5_DVORAK_LHS_2___, LCTLESC,    RCTLENT, ___SEG5_DVORAK_RHS_2___, \
+  ___SEG5_DVORAK_LHS_3___, _______,    _______, ___SEG5_DVORAK_RHS_3___,      \
                                            ___BASE_BOTTOM_ROW___ \
 ),
 
 [_QWERTY] = LAYOUT_wrapper( \
-  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, KC_TAB,     KC_BSPC, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
-  LALTT_A, LGUIT_S, LCTLT_D, LSFTT_F, KC_G, LCTLESC,    RCTLENT, KC_H,    RSFTT_J, RCTLT_K, RGUIT_L, RALTTSC, \
-  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, _______,    _______, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_QUOT, \
+  ___SEG5_QWERTY_LHS_1___, KC_TAB,     KC_BSPC, ___SEG5_QWERTY_RHS_1___,    \
+  ___SEG5_QWERTY_LHS_2___, LCTLESC,    RCTLENT, ___SEG5_QWERTY_RHS_2___, \
+  ___SEG5_QWERTY_LHS_3___, _______,    _______, ___SEG5_QWERTY_RHS_3___,      \
                                            ___BASE_BOTTOM_ROW___ \
 ),
 

@@ -3,6 +3,6 @@ RAW_ENABLE = no
 
 COMBO_ENABLE = yes
 
-LEADER_ENABLE = yes
-
 LTO_ENABLE = yes
+
+AUTO_SHIFT_ENABLE = yes

@@ -1,9 +1,9 @@
 #pragma once
 
 #define LWR_TAB LT(_LOWER, KC_TAB)
-#define LW2_ESC LT(_LOWER2, KC_ESC)
+#define LW2_ESC LT(_LOWER, KC_ESC)
 
-#define RS2_BSP LT(_RAISE2, KC_BSPC)
+#define RS2_BSP LT(_RAISE, KC_BSPC)
 #define RSE_ENT LT(_RAISE, KC_ENT)
 
 /* Home Row, outer column */

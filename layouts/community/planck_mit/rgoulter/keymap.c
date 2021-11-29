@@ -15,36 +15,17 @@ enum layers {
   _DVORAK,
   _QWERTY,
   _LOWER,
-  _LOWER2,
   _RAISE,
-  _RAISE2,
-  _CHILDPROOF,
   _NUMPAD,
   _ADJUST,
 };
 
-enum custom_keycodes {
-  QUARTER = SAFE_RANGE,
-  OSLINUX,
-  OSMACOS,
-  OSWIN,
-};
-
-enum host_os {
-  _LINUX,
-  _MACOS,
-  _WINDOWS,
-};
-
-char quarter_count = 0;
-
 #define QWERTY     DF(_QWERTY)
 #define DVORAK     DF(_DVORAK)
-#define CHILDPROOF DF(_CHILDPROOF)
 #define LOWER   MO(_LOWER)
-#define LOWER2   MO(_LOWER2)
+#define LOWER2   MO(_LOWER)
 #define RAISE   MO(_RAISE)
-#define RAISE2   MO(_RAISE2)
+#define RAISE2   MO(_RAISE)
 #define NUMPAD  MO(_NUMPAD)
 #define ADJUST  MO(_ADJUST)
 
@@ -56,6 +37,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // XXX: find place for the PrtScr, ScrlLck, Pause keys;
 // XXX: aim for one-handed numpad?
 // XXX: aim for one-handed cursor keys?
+
+// | KC_ASDN  | Lower the Auto Shift timeout variable (down)        |
+// | KC_ASUP  | Raise the Auto Shift timeout variable (up)          |
+// | KC_ASRP  | Report your current Auto Shift timeout value        |
+// | KC_ASON  | Turns on the Auto Shift Function                    |
+// | KC_ASOFF | Turns off the Auto Shift Function                   |
+// | KC_ASTG  | Toggles the state of the Auto Shift feature         |
 
 [_DVORAK] = LAYOUT_wrapper( \
   ___SEG5_DVORAK_LHS_1___, KC_TAB,     KC_BSPC, ___SEG5_DVORAK_RHS_1___,    \
@@ -80,32 +68,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______, _______,     _______,      _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
 ),
 
-[_LOWER2] = LAYOUT_planck_mit( \
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______ \
-),
-
 [_RAISE] = LAYOUT_planck_mit( \
   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_TILD, KC_BSLS, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    \
   _______, _______, _______, _______, _______, KC_DEL,  KC_SLSH, _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, \
   _______, KC_CUT,  KC_COPY, KC_PSTE, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______,    _______,       _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY \
-),
-
-[_RAISE2] = LAYOUT_planck_mit( \
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______ \
-),
-
-[_CHILDPROOF] = LAYOUT_planck_mit( \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-  LOWER,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,     XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RAISE \
 ),
 
 [_NUMPAD] = LAYOUT_planck_mit( \
@@ -117,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_ADJUST] =  LAYOUT_planck_mit( \
   RESET,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, RGB_SPI, RGB_SPD, _______,
-  _______, _______, _______, _______, _______, _______, _______, QWERTY,  XXXXXXX, DVORAK,  CHILDPROOF, XXXXXXX, \
+  _______, _______, _______, _______, _______, _______, _______, QWERTY,  XXXXXXX, DVORAK,  XXXXXXX, XXXXXXX, \
   _______, _______, _______, _______, _______, _______, _______, _______, KC_BTN1, KC_BTN2, KC_WH_D, KC_WH_U, \
   _______, _______, _______, _______, _______,     _______,      _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R \
 )
@@ -128,45 +95,19 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-  case QUARTER:
-    // corner
-    if (record->event.pressed) {
-      quarter_count += 1;
-    } else {
-      quarter_count -= 1;
-    }
-    if (quarter_count == 4) {
-      reset_keyboard();
-    }
-    return false;
-  }
-  return true;
-}
-
-
-// RAW_EPSIZE is 32
-void raw_hid_receive(uint8_t *data, uint8_t length) {
-    raw_hid_send(data, length);
-}
-
 enum combo_events {
   DESKTOP_GO_LEFT,
   DESKTOP_GO_RIGHT,
-  LEAD,
 };
 
 // can't be keys which have tap-hold
 const uint16_t PROGMEM dsk_lower_left_combo[] = {KC_J, KC_K, COMBO_END};
 // const uint16_t PROGMEM dsk_lower_left_combo[] = {LCTLT_E, LSFTT_U, COMBO_END};
 const uint16_t PROGMEM dsk_lower_right_combo[] = {KC_M, KC_W, COMBO_END};
-const uint16_t PROGMEM dsk_lower_lead_combo[] = {KC_SCLN, KC_Q, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
   [DESKTOP_GO_LEFT] = COMBO_ACTION(dsk_lower_left_combo),
   [DESKTOP_GO_RIGHT] = COMBO_ACTION(dsk_lower_right_combo),
-  [LEAD] = COMBO_ACTION(dsk_lower_lead_combo),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
@@ -181,30 +122,5 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
         tap_code16(CODE16_LINUX_DESKTOP_RIGHT);
       }
       break;
-    case LEAD:
-      if (pressed) {
-        qk_leader_start();
-      }
-      break;
-  }
-}
-LEADER_EXTERNS();
-
-void matrix_scan_user(void) {
-  LEADER_DICTIONARY() {
-    leading = false;
-    leader_end();
-
-    SEQ_ONE_KEY(KC_C) {
-      SEND_STRING("kubectl");
-    }
-
-    SEQ_ONE_KEY(KC_G) {
-      SEND_STRING("kubectl get pods --namespace production");
-    }
-
-    SEQ_ONE_KEY(KC_N) {
-      SEND_STRING("--namespace production");
-    }
   }
 }

@@ -4,7 +4,7 @@ MCU = STM32F401
 # Build Options
 #   change yes to no to disable
 #
-BOOTMAGIC_ENABLE = lite     # Virtual DIP switch configuration
+BOOTMAGIC_ENABLE = no     # Virtual DIP switch configuration
 MOUSEKEY_ENABLE = yes       # Mouse keys
 EXTRAKEY_ENABLE = yes       # Audio control and System control
 CONSOLE_ENABLE = yes         # Console for debug
@@ -26,7 +26,4 @@ SPLIT_KEYBOARD = yes
 # SERIAL_DRIVER = usart
 OLED_DRIVER_ENABLE = no
 WS2812_DRIVER = pwm
-OPT_DEFS += -DSTM32_DMA_REQUIRED=TRUE
-
-# Address of the bootloader in system memory
-STM32_BOOTLOADER_ADDRESS = 0x1FFF0000
+# OPT_DEFS += -DSTM32_DMA_REQUIRED=TRUE

@@ -17,3 +17,5 @@ ENCODER_ENABLE = no        # Enable rotary encoder support
 BLUETOOTH_ENABLE = no       # Enable Bluetooth
 AUDIO_ENABLE = no           # Audio output
 KEYBOARD_SHARED_EP = yes    # Free up some extra endpoints - needed if console+mouse+extra
+
+LAYOUTS = ortho_5x12

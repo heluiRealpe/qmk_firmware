@@ -73,6 +73,9 @@
 #define ___BASE_BOTTOM_ROW___ \
   _______, _______, _______, LWR_TAB, LW2_ESC,    KC_SPC,      RS2_BSP,    RSE_ENT, _______, _______, _______
 
+#define ___BASE_BOTTOM_ROW_12___ \
+  _______, _______, _______, LWR_TAB, LW2_ESC,    KC_SPC, KC_SPC,     RS2_BSP,    RSE_ENT, _______, _______, _______
+
 
 // macOS
 #define CODE16_MACOS_DESKTOP_LEFT  LCTL(KC_LEFT)

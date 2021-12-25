@@ -46,6 +46,7 @@
 #define ___SEG3_F789___ KC_F7, KC_F8, KC_F9
 
 #define ___SEG4_NAV2___ KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT
+#define ___SEG4_NAV_LDUR___ KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT
 #define ___SEG4_NAV3___ KC_HOME, KC_PGDN, KC_PGUP, KC_END
 
 #define ___SEG4_MOU_MV___ KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R
@@ -53,6 +54,9 @@
 #define ___SEG3_MOU_BTN___ KC_BTN1, KC_BTN2, KC_BTN3
 
 #define ___SEG4_MED___ KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT
+
+#define ___SEG5_12345___ KC_1, KC_2, KC_3, KC_4, KC_5
+#define ___SEG5_67890___ KC_6, KC_7, KC_8, KC_9, KC_0
 
 #define ___SEG5_DVORAK_LHS_1___ KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y
 #define ___SEG5_DVORAK_LHS_2___ LALTT_A, LGUIT_O, LCTLT_E, LSFTT_U, KC_I
@@ -69,6 +73,14 @@
 #define ___SEG5_QWERTY_RHS_1___ KC_Y,    KC_U,    KC_I,    KC_O,    KC_P
 #define ___SEG5_QWERTY_RHS_2___ KC_H,    RSFTT_J, RCTLT_K, RGUIT_L, RALTTSC
 #define ___SEG5_QWERTY_RHS_3___ KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_QUOT
+
+#define ___SEG5_QWERTY_LHS_SIMPLE_1___ KC_Q,    KC_W,    KC_E,    KC_R,    KC_T
+#define ___SEG5_QWERTY_LHS_SIMPLE_2___ KC_A,    KC_S,    KC_D,    KC_F,    KC_G
+#define ___SEG5_QWERTY_LHS_SIMPLE_3___ KC_Z,    KC_X,    KC_C,    KC_V,    KC_B
+
+#define ___SEG5_QWERTY_RHS_SIMPLE_1___ KC_Y,    KC_U,    KC_I,    KC_O,    KC_P
+#define ___SEG5_QWERTY_RHS_SIMPLE_2___ KC_H,    KC_J,    KC_K,    KC_L, RALTTSC
+#define ___SEG5_QWERTY_RHS_SIMPLE_3___ KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_QUOT
 
 #define ___BASE_BOTTOM_ROW___ \
   _______, _______, _______, LWR_TAB, LW2_ESC,    KC_SPC,      RS2_BSP,    RSE_ENT, _______, _______, _______

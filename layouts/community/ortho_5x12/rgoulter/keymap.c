@@ -14,6 +14,7 @@ extern keymap_config_t keymap_config;
 enum layers {
   _DVORAK,
   _QWERTY,
+  _GAMING,
   _LOWER,
   _LOWER2,
   _RAISE,
@@ -40,13 +41,15 @@ char quarter_count = 0;
 
 #define QWERTY     DF(_QWERTY)
 #define DVORAK     DF(_DVORAK)
+#define GAMING     DF(_GAMING)
 #define CHILDPROOF DF(_CHILDPROOF)
-#define LOWER   MO(_LOWER)
-#define LOWER2   MO(_LOWER2)
-#define RAISE   MO(_RAISE)
-#define RAISE2   MO(_RAISE2)
-#define NUMPAD  MO(_NUMPAD)
-#define ADJUST  MO(_ADJUST)
+
+#define LOWER      MO(_LOWER)
+#define LOWER2     MO(_LOWER2)
+#define RAISE      MO(_RAISE)
+#define RAISE2     MO(_RAISE2)
+#define NUMPAD     MO(_NUMPAD)
+#define ADJUST     MO(_ADJUST)
 
 #define __XXXXXXX_ROW__  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 
@@ -72,6 +75,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ___SEG5_QWERTY_LHS_2___, LCTLESC,    RCTLENT, ___SEG5_QWERTY_RHS_2___, \
   ___SEG5_QWERTY_LHS_3___, _______,    _______, ___SEG5_QWERTY_RHS_3___,      \
                                            ___BASE_BOTTOM_ROW_12___ \
+),
+
+// XXX: not using raise2; but, it doesn't fit here, either.
+[_GAMING] = LAYOUT_wrapper( \
+  KC_GESC, ___SEG5_12345___,           ___SEG5_67890___, KC_BSPC, \
+  KC_TAB,  ___SEG5_QWERTY_LHS_SIMPLE_1___, ___SEG5_QWERTY_RHS_SIMPLE_1___, KC_BSPC,  \
+  KC_CAPS, ___SEG5_QWERTY_LHS_SIMPLE_2___, ___SEG5_QWERTY_RHS_SIMPLE_2___, KC_ENTER,  \
+  KC_LSFT, ___SEG5_QWERTY_LHS_SIMPLE_3___, ___SEG5_QWERTY_RHS_SIMPLE_3___, KC_RSFT,  \
+  KC_LCTL, KC_LGUI, KC_LALT, XXXXXXX, LOWER, KC_SPC,   KC_SPC, RAISE, ___SEG4_NAV_LDUR___ \
 ),
 
 // XXX: Let's ... move the function keys elsewhere?
@@ -127,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_ADJUST] =  LAYOUT_wrapper( \
   __XXXXXXX_ROW__, \
   RESET,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, RGB_SPI, RGB_SPD, _______,
-  _______, _______, _______, _______, _______, _______, _______, QWERTY,  XXXXXXX, DVORAK,  CHILDPROOF, XXXXXXX, \
+  _______, _______, _______, _______, _______, _______, _______, QWERTY,  GAMING, DVORAK,  CHILDPROOF, XXXXXXX, \
   _______, _______, _______, _______, _______, _______, _______, _______, KC_BTN1, KC_BTN2, KC_WH_D, KC_WH_U, \
   _______, _______, _______, _______, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R \
 )

@@ -368,42 +368,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case MACRO1:
         if (record->event.pressed) {
-            SEND_STRING("************************");
+            SEND_STRING("*********************************");
         }
         return false;
     case MACRO2:
         if (record->event.pressed) {
-            SEND_STRING("************************");
+            SEND_STRING("*********************************");
         }
         return false;
     case MACRO3:
         if (record->event.pressed) {
-            SEND_STRING("************************");
+            SEND_STRING("*********************************");");
         }
         return false;
     case MACRO4:
         if (record->event.pressed) {
-            SEND_STRING("************************");
+            SEND_STRING("*********************************");
         }
         return false;
     case MACRO5:
         if (record->event.pressed) {
-            SEND_STRING("************************");
+            SEND_STRING("*********************************");
         }
         return false;
     case MACRO6:
         if (record->event.pressed) {
-            SEND_STRING("************************");
+            SEND_STRING("*********************************");
         }
         return false;
     case MACRO7:
         if (record->event.pressed) {
-            SEND_STRING("************************");
+            SEND_STRING("*********************************");
         }
         return false;
     case MACRO8:
         if (record->event.pressed) {
-            SEND_STRING("************************");
+            SEND_STRING("*********************************");");
         }
         return false;
     case SELLINE:

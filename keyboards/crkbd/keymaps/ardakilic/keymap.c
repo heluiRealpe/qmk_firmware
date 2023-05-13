@@ -50,7 +50,7 @@ enum {
 #define NUMBER_SIGN RALT(KC_3) //hashtag sign
 #define LOCKSCREEN LCTL(LSFT(KC_PWR)) // Screen Lock shortcut for OSX
 
-/* 
+/*
 // Unicode Turkish characters, in case it's needed
 enum {
     TR_C, // ç
@@ -125,7 +125,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                    /|-------+-------+-------'  +-------+-------+-------|\
   ),
 */
-  [_LOWER] = LAYOUT_split_3x6_3(
+  v_LOWER] = LAYOUT_split_3x6_3(
     KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,            KC_CIRC, KC_AMPR,    KC_ASTR,    KC_LPRN, KC_RPRN, KC_BSPC,
     KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,                   DOLLAR_SIGN,    KC_UNDS,  KC_PLUS,  KC_LBRC,  KC_RBRC,  KC_EQL,
     KC_F7,  KC_F8,  KC_F9,  KC_F10,  KC_F11,  KC_F12,                SQUARE_OPEN, SQUARE_CLOSE, CURLY_OPEN, CURLY_CLOSE, KC_GRV, LSFT(KC_GRV),

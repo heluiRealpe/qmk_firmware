@@ -89,6 +89,42 @@ led_config_t g_led_config = { {
 
 #ifdef OLED_ENABLE
 
+enum Layers{
+    L_QWERTY, L_LOWER, L_RAISE, L_MOV, L_NUM, L_ADJUST
+};
+
+// yeah, should be layer_state_set_user but that one doesn't update the mods
+void set_lighting_user(void) {
+    uint8_t layer = get_highest_layer(layer_state);
+    switch(layer){
+        case L_QWERTY:
+            rgblight_sethsv_noeeprom(HSV_WHITE);
+            led_t led_state = host_keyboard_led_state();
+            if(led_state.caps_lock){
+                rgblight_sethsv_noeeprom(HSV_RED);
+            }
+            //rgblight_sethsv(HSV_OFF);
+        break;
+        case L_LOWER:
+            rgblight_sethsv_noeeprom(HSV_GREEN);
+        break;
+        case L_RAISE:
+            rgblight_sethsv_noeeprom(HSV_PINK);
+        break;
+        case L_MOV:
+            rgblight_sethsv_noeeprom(HSV_BLUE);
+        break;
+        case L_NUM:
+            rgblight_sethsv_noeeprom(HSV_ORANGE);
+        break;
+        case L_ADJUST:
+            rgblight_sethsv_noeeprom(HSV_PURPLE);
+        break;
+        default:
+        break;
+    }
+}
+
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
   if (!is_keyboard_master()) {
     return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
@@ -96,25 +132,50 @@ oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
   return rotation;
 }
 
-enum Layers{
-    L_BASE, L_LOWER, L_RAISE, L_ADJUST
-};
-
 void oled_render_layer_state_r2g(void) {
+    set_lighting_user();
     oled_write_P(PSTR("Layer: "), false);
-    switch (get_highest_layer(layer_state)) {
-        case L_BASE:
-            oled_write_ln_P(PSTR("Default"), false);
+    uint8_t layer = get_highest_layer(layer_state);
+    switch (layer) {
+        case L_QWERTY:
+            oled_write_ln_P(PSTR("Q W E R T Y"), false);
             break;
         case L_LOWER:
-            oled_write_ln_P(PSTR("Lower"), false);
+            oled_write_ln_P(PSTR("L O W E R"), false);
             break;
         case L_RAISE:
-            oled_write_ln_P(PSTR("Raise"), false);
+            oled_write_ln_P(PSTR("R A I S E"), false); break;
+        case L_MOV:
+            oled_write_ln_P(PSTR("M O U S E"), false);
+            break;
+        case L_NUM:
+            oled_write_ln_P(PSTR("FrOw & MaCrOs"), false);
             break;
         case L_ADJUST:
-            oled_write_ln_P(PSTR("Adjust"), false);
+            oled_write_ln_P(PSTR("A D J U S T"), false);
             break;
+        default:
+            break;
+    }
+    oled_write_ln_P(PSTR("       "), false);
+
+    // Host Keyboard LED Status
+    // mods
+    led_t led_state = host_keyboard_led_state();
+    if(led_state.caps_lock){
+        oled_write_ln_P(PSTR("CAPS LOCK"), false);
+    } else if(get_mods() & MOD_MASK_SHIFT) {
+        oled_write_ln_P(PSTR("SHIFT"), false);
+    } else if(get_mods() & MOD_MASK_CTRL){
+        oled_write_ln_P(PSTR("CTRL"), false);
+    } else if(get_mods() & MOD_MASK_ALT){
+        oled_write_ln_P(PSTR("ALT"), false);
+    } else if(get_mods() & MOD_MASK_GUI){
+        oled_write_ln_P(PSTR("GUI"), false);
+    } else if(is_caps_word_on()){
+        oled_write_ln_P(PSTR("CAPS WORD"), false);
+    }else {
+        oled_write_ln_P(PSTR("         "), false);
     }
 }
 
@@ -151,7 +212,7 @@ const char *depad_str(const char *depad_str, char depad_char) {
 }
 
 void oled_render_keylog_r2g(void) {
-    //oled_write(keylog_str_r2g, false);
+    // oled_write(keylog_str_r2g, false);
     const char *last_row_r2g_str = get_u8_str(last_row_r2g, ' ');
     oled_write(depad_str(last_row_r2g_str, ' '), false);
     oled_write_P(PSTR("x"), false);
@@ -162,6 +223,7 @@ void oled_render_keylog_r2g(void) {
     oled_write(depad_str(last_keycode_r2g_str, ' '), false);
     oled_write_P(PSTR(":"), false);
     oled_write_char(key_name_r2g, false);
+    oled_write_ln_P(PSTR(" "), false);
 }
 
 void render_bootmagic_status_r2g(bool status) {

@@ -19,7 +19,7 @@
 #include "enums.h"
 #include "graphics.h"
 
-tap_dance_action_t tap_dance_actions[] = {
+qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_PLAY] = ACTION_TAP_DANCE_DOUBLE(KC_MPLY, KC_MNXT),
     [TD_HOME] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, KC_END),
 };

@@ -17,9 +17,10 @@
 
 #pragma once
 
-/* By default left side is selected as master, 
+/* The way how "handedness" is decided (which half is which),
 see https://docs.qmk.fm/#/feature_split_keyboard?id=setting-handedness
-for more options. */
+for more options.
+*/
 
 #if defined(KEYBOARD_sofle_rev1)
 // Add RGB underglow and top facing lighting

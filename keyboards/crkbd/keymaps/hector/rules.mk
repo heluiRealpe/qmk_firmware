@@ -9,6 +9,10 @@ VIA_ENABLE          = no         # Enable VIA
 
 CAPS_WORD_ENABLE = yes
 DYNAMIC_MACRO_ENABLE = yes
-SRC += features/select_word.c
 
 TAP_DANCE_ENABLE = yes
+
+COMBO_ENABLE = no
+
+# SRC += features/repeat_key.c
+SRC += features/select_word.c

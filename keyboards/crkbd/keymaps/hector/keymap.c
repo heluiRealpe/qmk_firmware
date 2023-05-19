@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include QMK_KEYBOARD_H
 
+// #include "features/repeat_key.h"
 #include "keymap_us_international.h"
 #include "sendstring_us_international.h"
 #include "features/select_word.h"
@@ -27,6 +28,7 @@ enum Layers{
 };
 
 enum custom_keycodes {
+  // REPEAT = SAFE_RANGE,
   SELWORD = SAFE_RANGE,
   SELLINE,
   SRCHSEL,
@@ -137,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, KC_ESC , WINSHOT, LALTTAB, RCTRTAB, KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_WHOM, KC_WBAK, KC_WREF, KC_WSCH, KC_WFWD,                       CW_TOGG, KC_APP, _______, _______, _______, _______,
+      _______, KC_WHOM, KC_WBAK, KC_WREF, KC_WSCH, KC_WFWD,                       CW_TOGG, KC_APP,/*REPEAT*/_______, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    AJSTLAY, MOVLAY , _______
                                       //`--------------------------'  `--------------------------'
@@ -303,6 +305,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
       break;
   }
+  // if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
   return true;
 }
 
@@ -343,3 +346,6 @@ bool caps_word_press_user(uint16_t keycode) {
             return false;  // Deactivate Caps Word.
     }
 }
+
+// combo_t key_combos[] = {};
+// uint16_t COMBO_LEN = 0;

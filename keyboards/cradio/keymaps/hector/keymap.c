@@ -23,6 +23,7 @@
  * https://precondition.github.io/home-row-mods
  */
 
+#include "features/repeat_key.h"
 #include "keymap_us_international.h"
 #include "sendstring_us_international.h"
 #include "features/select_word.h"
@@ -32,6 +33,7 @@ enum Layers{
 };
 
 enum custom_keycodes {
+  REPEAT = SAFE_RANGE,
   SELWORD = SAFE_RANGE,
   SELLINE,
   SRCHSEL,
@@ -142,7 +144,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       KC_ESC , WINSHOT, LALTTAB, RCTRTAB, KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC,
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-      KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, KC_APP ,                      MACRO8 , CW_TOGG, _______, _______, _______,
+      KC_LSFT, KC_LCTL, KC_LALT, REPEAT , KC_APP ,                      MACRO8 , CW_TOGG, _______, _______, _______,
   //+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
                                           _______, _______,    AJSTLAY, MOVLAY
                                       //`-----------------'  `-----------------'
@@ -257,7 +259,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 
+combo_t key_combos[] = {};
+uint16_t COMBO_LEN = 0;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+  if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
 
   if (!process_select_word(keycode, record, SELWORD)) {return false;}
   switch (keycode) {

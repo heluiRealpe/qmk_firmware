@@ -51,6 +51,10 @@ enum custom_keycodes {
   MACRO6,
   MACRO7,
   MACRO8,
+  MACRO9,
+  MACRO10,
+  MACRO11,
+  MACRO12,
   TD_Q_TAB = 0,
   TD_A_ESC,
   TD_ONEGR,
@@ -221,9 +225,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [L_NUM] = LAYOUT_split_3x5_2(
   //,--------------------------------------------.                    ,--------------------------------------------.
-      KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                      _______, _______, _______, KC_DEL , KC_BSPC,
+      KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                      MACRO12, MACRO9 , MACRO10, KC_DEL , KC_BSPC,
   //|--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-      KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 ,                      _______, MACRO5 , MACRO6 , MACRO7 , KC_QUOT,
+      KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 ,                      MACRO11, MACRO5 , MACRO6 , MACRO7 , KC_QUOT,
   //|--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       KC_F11 , KC_F12 , _______, _______, _______,                     SELLINE , KC_CAPS, SRCHSEL, _______, _______,
   //|--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
@@ -302,9 +306,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
             SEND_STRING("git ");
         }
+        return false;
     case MACRO8:
         if (record->event.pressed) {
             SEND_STRING("lepanto");
+        }
+        return false;
+    case MACRO9:
+        if (record->event.pressed) {
+            SEND_STRING("git push");
+        }
+        return false;
+    case MACRO10:
+        if (record->event.pressed) {
+            SEND_STRING("git pull");
+        }
+        return false;
+    case MACRO11:
+        if (record->event.pressed) {
+            SEND_STRING("sudo apt update");
+        }
+        return false;
+    case MACRO12:
+        if (record->event.pressed) {
+            SEND_STRING("sudo apt upgrade");
         }
         return false;
     case SELLINE:

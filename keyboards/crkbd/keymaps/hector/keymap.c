@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include QMK_KEYBOARD_H
 
-// #include "features/repeat_key.h"
+#include "features/repeat_key.h"
 #include "keymap_us_international.h"
 #include "sendstring_us_international.h"
 #include "features/select_word.h"
@@ -28,7 +28,7 @@ enum Layers{
 };
 
 enum custom_keycodes {
-  // REPEAT = SAFE_RANGE,
+  REPEAT = SAFE_RANGE,
   SELWORD = SAFE_RANGE,
   SELLINE,
   SRCHSEL,
@@ -139,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, KC_ESC , WINSHOT, LALTTAB, RCTRTAB, KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______,                      CW_TOGG, KC_APP , _______, _______, _______, _______,
+      _______, KC_LSFT, KC_LCTL, KC_LALT, REPEAT , KC_APP ,                      MACRO8 , CW_TOGG, _______, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    AJSTLAY, MOVLAY , _______
                                       //`--------------------------'  `--------------------------'
@@ -220,7 +220,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 ,                      MACRO2 , MACRO5 , MACRO6 , MACRO7 , KC_QUOT, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_F11 , KC_F12 , _______, _______, _______,                      KC_CAPS, SELLINE, SRCHSEL, _______, _______, _______,
+      _______, KC_F11 , KC_F12 , _______, _______, _______,                     SELLINE , KC_CAPS, SRCHSEL, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
@@ -254,7 +254,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+combo_t key_combos[] = {};
+uint16_t COMBO_LEN = 0;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+  if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
 
   if (!process_select_word(keycode, record, SELWORD)) {return false;}
   switch (keycode) {
@@ -293,6 +298,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             SEND_STRING("git ");
         }
         return false;
+    case MACRO8:
+        if (record->event.pressed) {
+            SEND_STRING("lepanto");
+        }
+        return false;
     case SELLINE:
         if (record->event.pressed) {
             SEND_STRING(SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END)));
@@ -305,7 +315,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
       break;
   }
-  // if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
   return true;
 }
 
@@ -347,5 +356,3 @@ bool caps_word_press_user(uint16_t keycode) {
     }
 }
 
-// combo_t key_combos[] = {};
-// uint16_t COMBO_LEN = 0;

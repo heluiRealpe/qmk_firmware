@@ -12,7 +12,7 @@ DYNAMIC_MACRO_ENABLE = yes
 
 TAP_DANCE_ENABLE = yes
 
-COMBO_ENABLE = no
+COMBO_ENABLE = yes
 
-# SRC += features/repeat_key.c
+SRC += features/repeat_key.c
 SRC += features/select_word.c

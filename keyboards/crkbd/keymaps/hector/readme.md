@@ -6,6 +6,9 @@ Corne R2G is an eddition of the classic CRKBD by footsan remade to feature a ful
 
 In this fold can be found the default via enabled keymap that can be in conjunction 
 
+```sh
+make crkbd/r2g:hector
+
 Flash example for this Keymap:  
 ```sh
 qmk flash -kb crkbd/r2g -km hector

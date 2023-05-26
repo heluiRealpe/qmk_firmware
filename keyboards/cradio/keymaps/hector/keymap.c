@@ -146,9 +146,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //---------------------------------------------.                    ,--------------------------------------------.
      KC_ONEGR,  KC_2  , KC_3   , KC_4   , KC_5   ,                      KC_6   , KC_7   , KC_8   , KC_9   , KC_0   ,
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-      KC_ESC , WINSHOT, LALTTAB, RCTRTAB, KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC,
+      KC_ESC , WINSHOT, LALTTAB, REPEAT , KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC,
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-      KC_LSFT, KC_LCTL, KC_LALT, REPEAT , KC_APP ,                      MACRO8 , CW_TOGG, _______, _______, _______,
+      KC_LSFT, KC_LCTL, KC_LALT, RCTRTAB, KC_APP ,                      MACRO8 , CW_TOGG, _______, _______, _______,
   //+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
                                           _______, _______,    AJSTLAY, MOVLAY
                                       //`-----------------'  `-----------------'

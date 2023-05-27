@@ -27,9 +27,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
+// Defaults for usable home row mod
 #define TAPPING_TERM 180
 #define IGNORE_MOD_TAP_INTERRUPT
 #define PERMISSIVE_HOLD
+#define SENTENCE_CASE_BUFFER_SIZE 10
 
 // Improved mouse key defaults
 // Delay between pressing a key and cursor movement

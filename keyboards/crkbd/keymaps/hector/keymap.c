@@ -367,6 +367,8 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
     case LOWER:
     case SPCNUM:
     case RAISE:
+    case AJSTLAY:
+    case MOVLAY:
       return 0;  // Bypass Achordion for these keys.
   }
 
@@ -410,7 +412,6 @@ bool caps_word_press_user(uint16_t keycode) {
             return false;  // Deactivate Caps Word.
     }
 }
-
 
 char sentence_case_press_user(uint16_t keycode, keyrecord_t* record,
                               uint8_t mods) {

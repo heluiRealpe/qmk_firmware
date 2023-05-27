@@ -26,6 +26,7 @@
 #include "features/achordion.h"
 #include "features/repeat_key.h"
 #include "features/select_word.h"
+#include "features/sentence_case.h"
 #include "keymap_us_international.h"
 #include "sendstring_us_international.h"
 
@@ -266,6 +267,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void matrix_scan_user(void) {
   achordion_task();
+  select_word_task();
+  sentence_case_task();
 }
 
 combo_t key_combos[] = {};
@@ -276,6 +279,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!process_achordion(keycode, record)) { return false; }
   if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
   if (!process_select_word(keycode, record, SELWORD)) {return false;}
+  if (!process_sentence_case(keycode, record)) { return false; }
 
   switch (keycode) {
     case MACRO1:
@@ -320,8 +324,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     case MACRO9:
         if (record->event.pressed) {
-            SEND_STRING("git pull");
-        }
+            SEND_STRING("git pull"); }
         return false;
     case MACRO10:
         if (record->event.pressed) {
@@ -369,6 +372,8 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
     case LOWER:
     case SPCNUM:
     case RAISE:
+    case AJSTLAY:
+    case MOVLAY:
       return 0;  // Bypass Achordion for these keys.
   }
 
@@ -412,3 +417,38 @@ bool caps_word_press_user(uint16_t keycode) {
             return false;  // Deactivate Caps Word.
     }
 };
+
+char sentence_case_press_user(uint16_t keycode, keyrecord_t* record,
+                              uint8_t mods) {
+  if ((mods & ~(MOD_MASK_SHIFT | MOD_BIT(KC_RALT))) == 0) {
+    const bool shifted = mods & MOD_MASK_SHIFT;
+    switch (keycode) {
+      case KC_LCTL ... KC_RGUI:  // Mod keys.
+        return '\0';  // These keys are ignored.
+
+      case KC_A ... KC_Z:
+        return 'a';  // Letter key.
+
+      case KC_DOT:  // Both . and Shift . (?) punctuate sentence endings.
+        return '.';
+      case KC_COMM:  // Shift , (!) is a sentence ending.
+        return shifted ? '.' : '#';
+
+      case KC_1 ... KC_0:  // 1 2 3 4 5 6 7 8 9 0
+      case KC_MINS ... KC_SCLN:  // - = [ ] ; ` backslash
+      case KC_GRV:
+      case KC_SLSH:
+        return '#';  // Symbol key.
+
+      case KC_SPC:
+        return ' ';  // Space key.
+
+      case KC_QUOT:
+        return '\'';  // Quote key.
+    }
+  }
+
+  // Otherwise clear Sentence Case to initial state.
+  sentence_case_clear();
+  return '\0';
+}

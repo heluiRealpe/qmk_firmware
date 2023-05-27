@@ -21,10 +21,11 @@
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
-// Defaults for usable home row mod
-#define TAPPING_TERM 180
+// Tap-hold configuration for home row mods.
+#define TAPPING_TERM 175
 #define IGNORE_MOD_TAP_INTERRUPT
-#define PERMISSIVE_HOLDs
+#define PERMISSIVE_HOLD
+#define SENTENCE_CASE_BUFFER_SIZE 10
 
 // Improved mouse key defaults
 // Delay between pressing a key and cursor movement
@@ -38,6 +39,13 @@
 #define MOUSEKEY_WHEEL_DELAY 16
 #define MOUSEKEY_WHEEL_INTERVAL 30
 #define MOUSEKEY_WHEEL_MAX_SPEED 10
-#define MOUSEKEY_WHEEL_TIME_TO_MAX 95
+#define MOUSEKEY_WHEEL_TIME_TO_MAX 9
 
-#define CAPS_WORD_IDLE_TIMEOUT 3000
+// When idle, turn off Caps Word after 5 seconds.
+#define CAPS_WORD_IDLE_TIMEOUT 5000
+
+// When idle, turn off Select Word after 2 seconds.
+#define SELECT_WORD_TIMEOUT 2000
+
+// When idle, turn off Sentence Case after 2 seconds.
+#define SENTENCE_CASE_TIMEOUT 2000

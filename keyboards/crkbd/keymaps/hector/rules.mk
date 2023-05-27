@@ -16,3 +16,4 @@ COMBO_ENABLE = yes
 
 SRC += features/repeat_key.c
 SRC += features/select_word.c
+SRC += features/achordion.c

@@ -27,9 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
+#define TAPPING_TERM 180
 #define IGNORE_MOD_TAP_INTERRUPT
-
-#define TAPPING_TERM 200
+#define PERMISSIVE_HOLD
 
 // Improved mouse key defaults
 // Delay between pressing a key and cursor movement

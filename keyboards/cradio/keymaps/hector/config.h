@@ -19,6 +19,10 @@
 
 #pragma once
 
+#define MASTER_LEFT
+// #define MASTER_RIGHT
+// #define EE_HANDS
+
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
 // Tap-hold configuration for home row mods.
@@ -26,6 +30,8 @@
 #define IGNORE_MOD_TAP_INTERRUPT
 #define PERMISSIVE_HOLD
 #define SENTENCE_CASE_BUFFER_SIZE 10
+
+#define UNICODE_SELECTED_MODES UNICODE_MODE_LINUX
 
 // Improved mouse key defaults
 // Delay between pressing a key and cursor movement

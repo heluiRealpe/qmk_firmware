@@ -33,6 +33,7 @@ oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
 
 void oled_render_layer_state_r2g(void) {
 
+    oled_write_ln_P(PSTR("    "), false);
     oled_write_P(PSTR("Layer: "), false);
     uint8_t layer = get_highest_layer(layer_state);
     switch (layer) {
@@ -184,7 +185,7 @@ bool oled_task_kb(void) {
     if (!oled_task_user()) { return false; }
     if (is_keyboard_master()) {
         oled_render_layer_state_r2g();
-        oled_render_keylog_r2g();
+        // oled_render_keylog_r2g();
     } else {
         oled_render_logo_r2g();
     }

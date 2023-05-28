@@ -21,6 +21,11 @@ enum custom_keycodes {
   RAISE,
   MOV,
   NUM,
+  UNDO,
+  CUT,
+  COPY,
+  PASTE,
+  REDO,
   ADJUST,
   MACRO1,
   MACRO2,
@@ -59,6 +64,7 @@ enum custom_keycodes {
 #define CUT LCTL(KC_X)
 #define COPY LCTL(KC_C)
 #define PASTE LCTL(KC_V)
+#define REDO LCTL(KC_Y)
 // MOD-TAP KEYS
 // LEFT HAND
 #define LSHIFT_Z SFT_T(KC_Z)
@@ -84,7 +90,7 @@ enum custom_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
- * QWERTY
+ *
   [_TPL] = LAYOUT_wrapper(
   //,-----------------------------------------------------.      ,----------------------------------------------------.
     |        |   Q    |   W    |   E    |   R    |   T    |      |    Y   |   U    |   I    |   O    |   P    |       |
@@ -131,7 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, KC_ESC , WINSHOT, LALTTAB, REPEAT , KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, UNDO   , CUT    , COPY   , PASTE  , KC_APP ,                      KC_CAPS, CW_TOGG, _______, _______, _______, _______,
+      _______, UNDO   , CUT    , COPY   , PASTE  , REDO   ,                      KC_CAPS, CW_TOGG, _______, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    AJSTLAY, MOVLAY , _______
                                       //`--------------------------'  `--------------------------'
@@ -351,10 +357,15 @@ bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, ui
 uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
   switch (tap_hold_keycode) {
     case LOWER:
-    case SPCNUM:
     case RAISE:
-    case AJSTLAY:
+    case SPCNUM:
     case MOVLAY:
+    case AJSTLAY:
+    case UNDO:
+    case CUT:
+    case COPY:
+    case PASTE:
+    case REDO:
       return 0;  // Bypass Achordion for these keys.
   }
 

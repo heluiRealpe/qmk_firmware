@@ -1,5 +1,3 @@
-// HECTOR REALPE
-
 #include QMK_KEYBOARD_H
 
 #include "features/achordion.h"
@@ -251,12 +249,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-void matrix_scan_user(void) {
-  achordion_task();
-  select_word_task();
-  sentence_case_task();
-}
-
 combo_t key_combos[] = {};
 uint16_t COMBO_LEN = 0;
 
@@ -443,4 +435,10 @@ char sentence_case_press_user(uint16_t keycode, keyrecord_t* record,
   // Otherwise clear Sentence Case to initial state.
   sentence_case_clear();
   return '\0';
+}
+
+void matrix_scan_user(void) {
+  achordion_task();
+  select_word_task();
+  sentence_case_task();
 }

@@ -1,34 +1,9 @@
-/* Copyright 2018-2021
- * ENDO Katsuhiro <ka2hiro@curlybracket.co.jp>
- * David Philip Barr <@davidphilipbarr>
- * Pierre Chevalier <pierrechevalier83@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include QMK_KEYBOARD_H
-
-/* Base layer 0 layout uses home row mods. See the following guide for details:
- * https://precondition.github.io/home-row-mods
- */
 
 #include "features/achordion.h"
 #include "features/repeat_key.h"
 #include "features/select_word.h"
 #include "features/sentence_case.h"
-#include "keymap_us_international.h"
-#include "sendstring_us_international.h"
 
 enum Layers{
     L_QWERTY, L_LOWER, L_RAISE, L_MOV, L_NUM, L_ADJUST
@@ -36,7 +11,7 @@ enum Layers{
 
 enum custom_keycodes {
   REPEAT = SAFE_RANGE,
-  SELWORD = SAFE_RANGE,
+  SELWORD,
   SELLINE,
   SRCHSEL,
   QWERTY,
@@ -44,6 +19,11 @@ enum custom_keycodes {
   RAISE,
   MOV,
   NUM,
+  UNDO,
+  CUT,
+  COPY,
+  PASTE,
+  REDO,
   ADJUST,
   MACRO1,
   MACRO2,
@@ -78,6 +58,11 @@ enum custom_keycodes {
 #define LALTTAB LALT(KC_TAB)
 #define RCTRTAB RCTL(KC_TAB)
 #define WINSHOT LSG(KC_S)
+#define UNDO LCTL(KC_Z)
+#define CUT LCTL(KC_X)
+#define COPY LCTL(KC_C)
+#define PASTE LCTL(KC_V)
+#define REDO LCTL(KC_Y)
 // MOD-TAP KEYS
 // LEFT HAND
 #define LSHIFT_Z SFT_T(KC_Z)
@@ -150,7 +135,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       KC_ESC , WINSHOT, LALTTAB, REPEAT , KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC,
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-      KC_LSFT, KC_LCTL, KC_LALT, RCTRTAB, KC_APP ,                      KC_CAPS, CW_TOGG, _______, _______, _______,
+      UNDO   , CUT    , COPY   , PASTE  , REDO   ,                      KC_CAPS, CW_TOGG, _______, _______, _______,
   //+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
                                           _______, _______,    AJSTLAY, MOVLAY
                                       //`-----------------'  `-----------------'
@@ -265,12 +250,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 
-void matrix_scan_user(void) {
-  achordion_task();
-  select_word_task();
-  sentence_case_task();
-}
-
 combo_t key_combos[] = {};
 uint16_t COMBO_LEN = 0;
 
@@ -370,10 +349,15 @@ bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, ui
 uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
   switch (tap_hold_keycode) {
     case LOWER:
-    case SPCNUM:
     case RAISE:
-    case AJSTLAY:
+    case SPCNUM:
     case MOVLAY:
+    case AJSTLAY:
+    case UNDO:
+    case CUT:
+    case COPY:
+    case PASTE:
+    case REDO:
       return 0;  // Bypass Achordion for these keys.
   }
 
@@ -451,4 +435,10 @@ char sentence_case_press_user(uint16_t keycode, keyrecord_t* record,
   // Otherwise clear Sentence Case to initial state.
   sentence_case_clear();
   return '\0';
+}
+
+void matrix_scan_user(void) {
+  achordion_task();
+  select_word_task();
+  sentence_case_task();
 }

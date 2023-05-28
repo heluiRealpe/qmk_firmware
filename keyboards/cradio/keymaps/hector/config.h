@@ -31,7 +31,7 @@
 #define PERMISSIVE_HOLD
 #define SENTENCE_CASE_BUFFER_SIZE 10
 
-#define UNICODE_SELECTED_MODES UNICODE_MODE_LINUX
+// #define UNICODE_SELECTED_MODES UNICODE_MODE_LINUX
 
 // Improved mouse key defaults
 // Delay between pressing a key and cursor movement

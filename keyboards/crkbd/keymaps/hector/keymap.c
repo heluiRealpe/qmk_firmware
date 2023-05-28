@@ -1,29 +1,11 @@
-/*
-Copyright 2019 @foostan
-Copyright 2020 Drashna Jaelre <@drashna>
-Copyright 2021 Elliot Powell  <@e11i0t23>
+// HECTOR REALPE
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 #include QMK_KEYBOARD_H
 
 #include "features/achordion.h"
 #include "features/repeat_key.h"
 #include "features/select_word.h"
 #include "features/sentence_case.h"
-#include "keymap_us_international.h"
-#include "sendstring_us_international.h"
 
 enum Layers{
     L_QWERTY, L_LOWER, L_RAISE, L_MOV, L_NUM, L_ADJUST

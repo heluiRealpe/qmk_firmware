@@ -55,6 +55,10 @@ enum custom_keycodes {
 #define LALTTAB LALT(KC_TAB)
 #define RCTRTAB RCTL(KC_TAB)
 #define WINSHOT LSG(KC_S)
+#define UNDO LCTL(KC_Z)
+#define CUT LCTL(KC_X)
+#define COPY LCTL(KC_C)
+#define PASTE LCTL(KC_V)
 // MOD-TAP KEYS
 // LEFT HAND
 #define LSHIFT_Z SFT_T(KC_Z)
@@ -127,7 +131,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, KC_ESC , WINSHOT, LALTTAB, REPEAT , KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_LSFT, KC_LCTL, KC_LALT, RCTRTAB, KC_APP ,                      KC_CAPS, CW_TOGG, _______, _______, _______, _______,
+      _______, UNDO   , CUT    , COPY   , PASTE  , KC_APP ,                      KC_CAPS, CW_TOGG, _______, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    AJSTLAY, MOVLAY , _______
                                       //`--------------------------'  `--------------------------'

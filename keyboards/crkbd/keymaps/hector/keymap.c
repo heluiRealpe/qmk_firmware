@@ -187,7 +187,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       _______, _______, _______, KC_END , _______, _______,                      MACRO1 , MACRO3 , MACRO4 , _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO2 , MACRO8 , _______, KC_SLEP, _______, _______,
+      _______, KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO2 , MACRO8 , _______, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, QK_BOOT, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -252,11 +252,48 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 combo_t key_combos[] = {};
 uint16_t COMBO_LEN = 0;
 
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
+  switch (keycode) {
+    // Increase the tapping term a little for slower ring and pinky fingers.
+   // LEFT HAND
+    case KC_QTAB:
+    case KC_AESC:
+    case LSHIFT_Z:
+    case KC_WHOME:
+    case LCTRL_X:
+    // RIGHT HAND
+    case KC_SCLQT:
+    case RSHIFT_H:
+    case RCTR_DOT:
+      return TAPPING_TERM + 15;
+
+    default:
+      return TAPPING_TERM;
+  }
+}
+
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t* record) {
+  // If you quickly hold a tap-hold key after tapping it, the tap action is
+  // repeated. Key repeating is useful e.g. for Vim navigation keys, but can
+  // lead to missed triggers in fast typing. Here, returning 0 means we
+  // instead want to "force hold" and disable key repeating.
+  switch (keycode) {
+    // Repeating is useful for Vim navigation keys.
+    case KC_H:
+    case KC_J:
+    case KC_K:
+    case KC_L:
+      return QUICK_TAP_TERM;  // Enable key repeating.
+    default:
+      return 0;  // Otherwise, force hold and disable key repeating.
+  }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   if (!process_achordion(keycode, record)) { return false; }
   if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
-  if (!process_select_word(keycode, record, SELWORD)) {return false; }
+  if (!process_select_word(keycode, record, SELWORD)) {return false;}
   if (!process_sentence_case(keycode, record)) { return false; }
 
   switch (keycode) {
@@ -302,8 +339,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     case MACRO9:
         if (record->event.pressed) {
-            SEND_STRING("git pull");
-        }
+            SEND_STRING("git pull"); }
         return false;
     case MACRO10:
         if (record->event.pressed) {
@@ -335,6 +371,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
+bool caps_word_press_user(uint16_t keycode) {
+    switch (keycode) {
+        // Keycodes that continue Caps Word, with shift applied.
+        case KC_A ... KC_Z:
+        case KC_AESC:
+        case KC_QTAB:
+        case KC_WHOME:
+        case KC_EEND:
+        case KC_MINS:
+        case KC_ENE:
+            add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
+            return true;
+
+        // Keycodes that continue Caps Word, without shifting.
+        case KC_0 ... KC_0:
+        case KC_BSPC:
+        case KC_DEL:
+        case KC_UNDS:
+            return true;
+
+        default:
+            return false;  // Deactivate Caps Word.
+    }
+}
+
 bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, uint16_t other_keycode, keyrecord_t* other_record) {
   // Also allow same-hand holds when the other key is in the rows below the
   // alphas. I need the `% (MATRIX_ROWS / 2)` because my keyboard is split.
@@ -362,44 +423,6 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
   }
 
   return 800;  // Otherwise use a timeout of 800 ms.
-}
-
-// Tap Dance Definitions
-tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for Q, twice for ESC
-    [TD_Q_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_Q, KC_TAB),
-    [TD_A_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_A, KC_ESC),
-    [TD_ONEGR] = ACTION_TAP_DANCE_DOUBLE(KC_1, KC_GRV),
-    [TD_EXTIL] = ACTION_TAP_DANCE_DOUBLE(KC_EXLM, KC_TILD),
-    [TD_SCLQT] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_QUOT),
-    [TD_WHOME] = ACTION_TAP_DANCE_DOUBLE(KC_W, KC_HOME),
-    [TD_EEND] = ACTION_TAP_DANCE_DOUBLE(KC_E, KC_END),
-    [TD_ENE] = ACTION_TAP_DANCE_DOUBLE(KC_N, RALT(KC_N)),
-};
-
-bool caps_word_press_user(uint16_t keycode) {
-    switch (keycode) {
-        // Keycodes that continue Caps Word, with shift applied.
-        case KC_A ... KC_Z:
-        case KC_AESC:
-        case KC_QTAB:
-        case KC_WHOME:
-        case KC_EEND:
-        case KC_MINS:
-        case KC_ENE:
-            add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
-            return true;
-
-        // Keycodes that continue Caps Word, without shifting.
-        case KC_0 ... KC_0:
-        case KC_BSPC:
-        case KC_DEL:
-        case KC_UNDS:
-            return true;
-
-        default:
-            return false;  // Deactivate Caps Word.
-    }
 }
 
 char sentence_case_press_user(uint16_t keycode, keyrecord_t* record,
@@ -436,6 +459,19 @@ char sentence_case_press_user(uint16_t keycode, keyrecord_t* record,
   sentence_case_clear();
   return '\0';
 }
+
+// Tap Dance Definitions
+tap_dance_action_t tap_dance_actions[] = {
+    // Tap once for Q, twice for ESC
+    [TD_Q_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_Q, KC_TAB),
+    [TD_A_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_A, KC_ESC),
+    [TD_ONEGR] = ACTION_TAP_DANCE_DOUBLE(KC_1, KC_GRV),
+    [TD_EXTIL] = ACTION_TAP_DANCE_DOUBLE(KC_EXLM, KC_TILD),
+    [TD_SCLQT] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_QUOT),
+    [TD_WHOME] = ACTION_TAP_DANCE_DOUBLE(KC_W, KC_HOME),
+    [TD_EEND] = ACTION_TAP_DANCE_DOUBLE(KC_E, KC_END),
+    [TD_ENE] = ACTION_TAP_DANCE_DOUBLE(KC_N, RALT(KC_N)),
+};
 
 void matrix_scan_user(void) {
   achordion_task();

@@ -240,7 +240,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,--------------------------------------------.                    ,--------------------------------------------.
       QWERTY , KC_ACL0, KC_ACL1, KC_ACL2, QWERTY ,                      KC_MPLY, KC_VOLD, KC_VOLU, KC_MUTE, QWERTY ,
   //|--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-      QWERTY , QWERTY , KC_BTN2, KC_BTN1, QWERTY ,                      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_SLEP,
+      QWERTY , QWERTY , KC_BTN2, KC_BTN1, QWERTY ,                      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, QWERTY ,
   //|--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, QWERTY ,                      KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, QWERTY ,
   //|--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
@@ -375,33 +375,26 @@ bool caps_word_press_user(uint16_t keycode) {
     switch (keycode) {
         // Keycodes that continue Caps Word, with shift applied.
         case KC_A ... KC_Z:
+        case KC_AESC:
+        case KC_QTAB:
+        case KC_WHOME:
+        case KC_EEND:
+        case KC_MINS:
+        case KC_ENE:
             add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
             return true;
 
         // Keycodes that continue Caps Word, without shifting.
-        case KC_1 ... KC_0:
-        // LEFT HAND
-        case KC_QTAB:
-        case KC_AESC:
-        case LSHIFT_Z:
-        case KC_WHOME:
-        case LCTRL_X:
-        case KC_EEND:
-        case LALT_C:
-        case LGUI_V:
-        // RIGHT HAND
-        case KC_MINS:
-        case KC_ENE:
+        case KC_0 ... KC_0:
         case KC_BSPC:
         case KC_DEL:
-        case KC_SCLQT:
-        case RGUIL_M:
+        case KC_UNDS:
             return true;
 
         default:
             return false;  // Deactivate Caps Word.
     }
-};
+}
 
 bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, uint16_t other_keycode, keyrecord_t* other_record) {
   // Also allow same-hand holds when the other key is in the rows below the

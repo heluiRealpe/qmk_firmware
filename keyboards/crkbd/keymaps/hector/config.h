@@ -1,7 +1,5 @@
 #pragma once
 
-/* Select hand configuration */
-
 #define MASTER_LEFT
 // #define MASTER_RIGHT
 // #define EE_HANDS
@@ -10,11 +8,15 @@
 
 // Tap-hold configuration for home row mods.
 #define TAPPING_TERM 175
+#define TAPPING_TERM_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
 #define PERMISSIVE_HOLD
 #define SENTENCE_CASE_BUFFER_SIZE 10
 
-// #define UNICODE_SELECTED_MODES UNICODE_MODE_LINUX
+#define UNICODE_SELECTED_MODES UNICODE_MODE_LINUX
+
+#define QUICK_TAP_TERM_PER_KEY
+#define QUICK_TAP_TERM 120
 
 // Improved mouse key defaults
 // Delay between pressing a key and cursor movement
@@ -28,7 +30,7 @@
 #define MOUSEKEY_WHEEL_DELAY 16
 #define MOUSEKEY_WHEEL_INTERVAL 30
 #define MOUSEKEY_WHEEL_MAX_SPEED 10
-#define MOUSEKEY_WHEEL_TIME_TO_MAX 95
+#define MOUSEKEY_WHEEL_TIME_TO_MAX 9
 
 // When idle, turn off Caps Word after 5 seconds.
 #define CAPS_WORD_IDLE_TIMEOUT 5000

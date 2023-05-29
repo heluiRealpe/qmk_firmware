@@ -7,6 +7,5 @@ SRC += features/sentence_case.c
 DYNAMIC_MACRO_ENABLE = yes
 TAP_DANCE_ENABLE = yes
 CAPS_WORD_ENABLE = yes
-
 COMBO_ENABLE = yes
 

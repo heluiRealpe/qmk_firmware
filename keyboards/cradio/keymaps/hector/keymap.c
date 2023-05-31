@@ -37,6 +37,7 @@ enum custom_keycodes {
   MACRO10,
   MACRO11,
   MACRO12,
+  MACRO13,
   TD_Q_TAB = 0,
   TD_A_ESC,
   TD_ONEGR,
@@ -185,7 +186,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [L_ADJUST] = LAYOUT_split_3x5_2(
   //,-------------------------------------------.                    ,--------------------------------------------.
-     _______, _______, KC_END , _______, _______,                      MACRO1 , MACRO3 , MACRO4 , _______, _______,
+     _______, _______, KC_END , _______, _______,                      MACRO1 , MACRO3 , MACRO4 , MACRO13, _______,
   //|-------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
      KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO2 , MACRO8 , _______, _______, _______,
   //|-------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
@@ -329,7 +330,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     case MACRO7:
         if (record->event.pressed) {
-            SEND_STRING("git ");
+            SEND_STRING("pacman -Syu");
         }
         return false;
     case MACRO8:
@@ -354,6 +355,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case MACRO12:
         if (record->event.pressed) {
             SEND_STRING("sudo apt upgrade");
+        }
+        return false;
+    case MACRO13:
+        if (record->event.pressed) {
+            SEND_STRING("B3l$nRv1zF3rn$nd3z");
         }
         return false;
     case SELLINE:
@@ -385,7 +391,7 @@ bool caps_word_press_user(uint16_t keycode) {
             return true;
 
         // Keycodes that continue Caps Word, without shifting.
-        case KC_0 ... KC_0:
+        case KC_1 ... KC_0:
         case KC_BSPC:
         case KC_DEL:
         case KC_UNDS:

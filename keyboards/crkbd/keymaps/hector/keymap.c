@@ -37,6 +37,7 @@ enum custom_keycodes {
   MACRO10,
   MACRO11,
   MACRO12,
+  MACRO13,
   TD_Q_TAB = 0,
   TD_A_ESC,
   TD_ONEGR,
@@ -45,6 +46,7 @@ enum custom_keycodes {
   TD_WHOME,
   TD_EEND,
   TD_ENE,
+  TD_SWINSHOT
 };
 
 // LAYER SWITCHING
@@ -82,6 +84,7 @@ enum custom_keycodes {
 #define KC_EEND TD(TD_EEND)
 #define KC_ONEGR TD(TD_ONEGR)
 #define KC_EXTIL TD(TD_EXTIL)
+#define KC_SSHOT TD(TD_SWINSHOT)
 // RIGHT HAND
 #define KC_SCLQT TD(TD_SCLQT)
 #define KC_ENE TD(TD_ENE)
@@ -106,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, KC_QTAB,KC_WHOME, KC_EEND,   KC_R ,  KC_T  ,                       KC_Y  ,   KC_U ,  KC_I  ,  KC_O  ,  KC_P  , XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, KC_AESC,  KC_S  ,  KC_D  ,   KC_F ,  KC_G  ,                       KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLQT, XXXXXXX,
+      XXXXXXX, KC_AESC,KC_SSHOT,  KC_D  ,   KC_F ,  KC_G  ,                       KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLQT, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX,LSHIFT_Z, LCTRL_X, LALT_C , LGUI_V ,  KC_B  ,                      KC_ENE , RGUIL_M,RALT_COM,RCTR_DOT,RSHIFT_H, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -133,7 +136,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       _______,KC_ONEGR,  KC_2  , KC_3   , KC_4   , KC_5   ,                      KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_ESC , WINSHOT, LALTTAB, REPEAT , KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC, _______,
+      _______, KC_ESC , LALTTAB, RCTRTAB, REPEAT , KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, UNDO   , CUT    , COPY   , PASTE  , REDO   ,                      KC_CAPS, CW_TOGG,KC_COMMA, KC_DOT ,KC_SLASH, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -185,7 +188,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [L_ADJUST] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, _______, _______, KC_END , _______, _______,                      MACRO1 , MACRO3 , MACRO4 , _______, _______, _______,
+      _______, _______, _______, KC_END , _______, _______,                      MACRO1 , MACRO3 , MACRO4 , MACRO13, _______, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO2 , MACRO8 , _______, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -329,7 +332,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     case MACRO7:
         if (record->event.pressed) {
-            SEND_STRING("git ");
+            SEND_STRING("pacman -Syu");
         }
         return false;
     case MACRO8:
@@ -354,6 +357,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case MACRO12:
         if (record->event.pressed) {
             SEND_STRING("sudo apt upgrade");
+        }
+        return false;
+    case MACRO13:
+        if (record->event.pressed) {
+            SEND_STRING("B3l$nRv1zF3rn$nd3z");
         }
         return false;
     case SELLINE:
@@ -385,7 +393,7 @@ bool caps_word_press_user(uint16_t keycode) {
             return true;
 
         // Keycodes that continue Caps Word, without shifting.
-        case KC_0 ... KC_0:
+        case KC_1 ... KC_0:
         case KC_BSPC:
         case KC_DEL:
         case KC_UNDS:
@@ -471,6 +479,7 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_WHOME] = ACTION_TAP_DANCE_DOUBLE(KC_W, KC_HOME),
     [TD_EEND] = ACTION_TAP_DANCE_DOUBLE(KC_E, KC_END),
     [TD_ENE] = ACTION_TAP_DANCE_DOUBLE(KC_N, RALT(KC_N)),
+    [TD_SWINSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_S, LSG(KC_S)),
 };
 
 void matrix_scan_user(void) {

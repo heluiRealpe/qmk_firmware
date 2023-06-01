@@ -45,7 +45,8 @@ enum custom_keycodes {
   TD_SCLQT,
   TD_WHOME,
   TD_EEND,
-  TD_ENE
+  TD_ENE,
+  TD_SWINSHOT
 };
 
 // LAYER SWITCHING
@@ -83,6 +84,7 @@ enum custom_keycodes {
 #define KC_EEND TD(TD_EEND)
 #define KC_ONEGR TD(TD_ONEGR)
 #define KC_EXTIL TD(TD_EXTIL)
+#define KC_SSHOT TD(TD_SWINSHOT)
 // RIGHT HAND
 #define KC_SCLQT TD(TD_SCLQT)
 #define KC_ENE TD(TD_ENE)
@@ -107,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //--------------------------------------------.                    ,--------------------------------------------.
      KC_QTAB,KC_WHOME, KC_EEND,   KC_R ,  KC_T  ,                       KC_Y  ,   KC_U ,  KC_I  ,  KC_O  ,  KC_P  ,
   //--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-     KC_AESC,  KC_S  ,  KC_D  ,   KC_F ,  KC_G  ,                       KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLQT,
+     KC_AESC,KC_SSHOT,  KC_D  ,   KC_F ,  KC_G  ,                       KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLQT,
   //--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
     LSHIFT_Z, LCTRL_X, LALT_C , LGUI_V ,  KC_B  ,                      KC_ENE , RGUIL_M,RALT_COM,RCTR_DOT,RSHIFT_H,
   //--------+--------+--------+--------|--------+--------|  |--------+--------+--------+--------+--------+--------|
@@ -478,6 +480,7 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_WHOME] = ACTION_TAP_DANCE_DOUBLE(KC_W, KC_HOME),
     [TD_EEND] = ACTION_TAP_DANCE_DOUBLE(KC_E, KC_END),
     [TD_ENE] = ACTION_TAP_DANCE_DOUBLE(KC_N, RALT(KC_N)),
+    [TD_SWINSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_S, LSG(KC_S)),
 };
 
 void matrix_scan_user(void) {

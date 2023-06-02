@@ -265,6 +265,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
     case LSHIFT_Z:
     case KC_WHOME:
     case LCTRL_X:
+    case KC_SSHOT:
     // RIGHT HAND
     case KC_SCLQT:
     case RSHIFT_H:
@@ -390,6 +391,7 @@ bool caps_word_press_user(uint16_t keycode) {
         case KC_EEND:
         case KC_MINS:
         case KC_ENE:
+        case KC_SSHOT:
             add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
             return true;
 

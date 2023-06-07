@@ -49,6 +49,7 @@ enum custom_keycodes {
   TD_SWINSHOT
 };
 
+#define KC_CAD LALT(LCTL(KC_DEL))
 // LAYER SWITCHING
 #define LOWER LT(L_LOWER, KC_BSPC)
 #define RAISE LT(L_RAISE, KC_ENT)
@@ -163,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,--------------------------------------------.                    ,--------------------------------------------.
      KC_EXTIL,  KC_AT , KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-      KC_PSCR, WINSHOT, KC_PGUP, KC_PGDN, _______,                      KC_PIPE, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR,
+      KC_PSCR, WINSHOT, KC_PGUP, KC_PGDN, KC_CAD ,                      KC_PIPE, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR,
   //|--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       DM_PLY2, DM_REC2, DM_PLY1, DM_REC1, DM_RSTP,                      KC_LEFT, KC_DOWN, KC_UP  ,KC_RIGHT, _______,
   //|--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|

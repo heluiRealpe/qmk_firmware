@@ -46,9 +46,9 @@ enum custom_keycodes {
   TD_WHOME,
   TD_EEND,
   TD_ENE,
-  TD_SWINSHOT
 };
 
+#define KC_CAD LALT(LCTL(KC_DEL))
 // LAYER SWITCHING
 #define LOWER LT(L_LOWER, KC_BSPC)
 #define RAISE LT(L_RAISE, KC_ENT)
@@ -76,6 +76,7 @@ enum custom_keycodes {
 #define RCTR_DOT RCTL_T(KC_DOT)
 #define RGUIL_M RGUI_T(KC_M)
 #define RALT_COM RALT_T(KC_COMM)
+#define LALT_COM LALT_T(KC_COMM)
 // TAP-DANCE KEYS
 // LEFT HAND
 #define KC_QTAB TD(TD_Q_TAB)
@@ -84,10 +85,10 @@ enum custom_keycodes {
 #define KC_EEND TD(TD_EEND)
 #define KC_ONEGR TD(TD_ONEGR)
 #define KC_EXTIL TD(TD_EXTIL)
-#define KC_SSHOT TD(TD_SWINSHOT)
 // RIGHT HAND
 #define KC_SCLQT TD(TD_SCLQT)
 #define KC_ENE TD(TD_ENE)
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
@@ -109,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, KC_QTAB,KC_WHOME, KC_EEND,   KC_R ,  KC_T  ,                       KC_Y  ,   KC_U ,  KC_I  ,  KC_O  ,  KC_P  , XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, KC_AESC,KC_SSHOT,  KC_D  ,   KC_F ,  KC_G  ,                       KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLQT, XXXXXXX,
+      XXXXXXX, KC_AESC,  KC_S  ,  KC_D  ,   KC_F ,  KC_G  ,                       KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLQT, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX,LSHIFT_Z, LCTRL_X, LALT_C , LGUI_V ,  KC_B  ,                      KC_ENE , RGUIL_M,RALT_COM,RCTR_DOT,RSHIFT_H, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -163,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       _______,KC_EXTIL,  KC_AT , KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_PSCR, WINSHOT, KC_PGUP, KC_PGDN, _______,                      KC_PIPE, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, _______,
+      _______, KC_PSCR, WINSHOT, KC_PGUP, KC_PGDN, KC_CAD ,                      KC_PIPE, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, DM_PLY2, DM_REC2, DM_PLY1, DM_REC1, DM_RSTP,                      KC_LEFT, KC_DOWN, KC_UP  ,KC_RIGHT, _______, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -264,7 +265,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
     case LSHIFT_Z:
     case KC_WHOME:
     case LCTRL_X:
-    case KC_SSHOT:
     // RIGHT HAND
     case KC_SCLQT:
     case RSHIFT_H:
@@ -390,7 +390,6 @@ bool caps_word_press_user(uint16_t keycode) {
         case KC_EEND:
         case KC_MINS:
         case KC_ENE:
-        case KC_SSHOT:
             add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
             return true;
 
@@ -481,7 +480,6 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_WHOME] = ACTION_TAP_DANCE_DOUBLE(KC_W, KC_HOME),
     [TD_EEND] = ACTION_TAP_DANCE_DOUBLE(KC_E, KC_END),
     [TD_ENE] = ACTION_TAP_DANCE_DOUBLE(KC_N, RALT(KC_N)),
-    [TD_SWINSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_S, LSG(KC_S)),
 };
 
 void matrix_scan_user(void) {

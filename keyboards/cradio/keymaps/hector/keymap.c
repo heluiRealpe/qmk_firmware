@@ -46,6 +46,7 @@ enum custom_keycodes {
   TD_WHOME,
   TD_EEND,
   TD_ENE,
+  TD_IINS
 };
 
 #define KC_CAD LALT(LCTL(KC_DEL))
@@ -86,6 +87,7 @@ enum custom_keycodes {
 #define KC_ONEGR TD(TD_ONEGR)
 #define KC_EXTIL TD(TD_EXTIL)
 // RIGHT HAND
+#define KC_IINS TD(TD_IINS)
 #define KC_SCLQT TD(TD_SCLQT)
 #define KC_ENE TD(TD_ENE)
 
@@ -107,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [L_QWERTY] = LAYOUT_split_3x5_2(
   //--------------------------------------------.                    ,--------------------------------------------.
-     KC_QTAB,KC_WHOME, KC_EEND,   KC_R ,  KC_T  ,                       KC_Y  ,   KC_U ,  KC_I  ,  KC_O  ,  KC_P  ,
+     KC_QTAB,KC_WHOME, KC_EEND,   KC_R ,  KC_T  ,                       KC_Y  ,   KC_U , KC_IINS,  KC_O  ,  KC_P  ,
   //--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
      KC_AESC,  KC_S  ,  KC_D  ,   KC_F ,  KC_G  ,                       KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLQT,
   //--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
@@ -123,9 +125,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //---------------------------------------------.      ,--------------------------------------------.
     |   1    |   2    |   3    |   4    |   5    |      |     6  |   7    |   8    |   9    |   0    |
   //+--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
-    |        |        |        |        |        |      |    \   |   -    |   =    |   [    |   ]    |
+    |        |        |        | Repeat | Tab    |      |    \   |   -    |   =    |   [    |   ]    |
   //+--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
-    |BrowHome|BrowBack|BroReloa|BroSearc|BoForwar|      | Insert |        |        |        |        |
+    |  UNDO  |   CUT  |  COPY  |  PASTE | REDO   |      |CapsLock|CapsWord|LaltComm|        |        |
   //+--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
                                    ----------------,  ,---------------.
                                    | ******|       |  |       |       |
@@ -140,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       UNDO   , CUT    , COPY   , PASTE  , REDO   ,                      KC_CAPS, CW_TOGG,LALT_COM, KC_DOT ,KC_SLASH,
   //+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
-                                          _______, _______,    AJSTLAY, MOVLAY
+                                          _______, KC_ENT ,    AJSTLAY, MOVLAY
                                       //`-----------------'  `-----------------'
   ),
 
@@ -150,7 +152,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,--------------------------------------------.      ,--------------------------------------------.
     |   !    |   @    |   #    |   $    |   %    |      |    ^   |    &   |   *    |   (    |   )    |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
-    |        | Screen | WnShoo |        |        |      |    |   |   _    |   +    |   {    |   }    |
+    | Screen | WnShoo | PageUp |PageDown|CtrAlDel|      |    |   |   _    |   +    |   {    |   }    |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
     |  PLY2  |  REC2  |  PLY1  |  REC1  |  RSTP  |      | Left   | Down   |  Up    | Right  |        |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
@@ -175,11 +177,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * L_ADJUST LAYER
   [_TPL] = LAYOUT_wrapper(
   //,--------------------------------------------.      ,--------------------------------------------.
-    |        |        |  End   |        |        |      |        | Bri-   | Bri+   |        |        |
+    |        |        |  End   |        |        |      |        |        |        |        |        |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
-    | Home   |        |        |        |        |      |        | RGB-   | RGB+   |        |        |
+    | Home   |        | Bri-   | Bri+   |        |      |        |        |        |        |        |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
-    |Static  |BLtogg  |BLstep  |        |        |      |        | SAT-   | SAT+   |        | QK_BOOT|
+    |        |        |        |        |        |        |      |        |        |        |        |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
                                    ,---------------,  ,---------------.
                                    | ******|       |  | ******|       |
@@ -206,7 +208,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
        F6    |  F7    |  F8    |  F9    |  F10   |      | MACRO1 | MACRO1 | MACRO1 | MACRO1 |   '"   |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
-       F11   |  F12   |        |        |        |      |        |        |        |        |        |
+       F11   |  F12   |        |        |        |      | SRCHSEL| SELWORD| SELLINE|        |        |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
                                    ,---------------,  ,---------------.
                                    |       | ******|  |       |       |
@@ -229,11 +231,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * L_MOV LAYER
   [_TPL] = LAYOUT_wrapper(
   //,--------------------------------------------.      ,--------------------------------------------.
-    |        |        |        |        |        |         PlaSto|  Vol-  |  Vol+  |  Mute  |        |
+    |        | ACC0   | ACC1   | ACC2   |        |         PlaSto|  Vol-  |  Vol+  |  Mute  |        |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
-    |        |        |        | MOUS1  | MOUS2  |         MOUSL | MOUSD  | MOUSU  | MOUSR  | SySleep|
+    |        |        | MOUS1  | MOUS2  |        |         MOUSL | MOUSD  | MOUSU  | MOUSR  |        |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
-    |        | ACC0   | ACC1   | ACC2   |        |        WheelL | WheelD | WheelU | WheelR |        |
+    |        |        |        |        |        |        WheelL | WheelD | WheelU | WheelR |        |
   //|--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------|
                                     ,---------------,  ,---------------.
                                     | ******|       |  |       | ******|
@@ -390,6 +392,7 @@ bool caps_word_press_user(uint16_t keycode) {
         case KC_EEND:
         case KC_MINS:
         case KC_ENE:
+        case KC_IINS:
             add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
             return true;
 
@@ -479,6 +482,7 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_SCLQT] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_QUOT),
     [TD_WHOME] = ACTION_TAP_DANCE_DOUBLE(KC_W, KC_HOME),
     [TD_EEND] = ACTION_TAP_DANCE_DOUBLE(KC_E, KC_END),
+    [TD_IINS] = ACTION_TAP_DANCE_DOUBLE(KC_I, KC_INS),
     [TD_ENE] = ACTION_TAP_DANCE_DOUBLE(KC_N, RALT(KC_N)),
 };
 

@@ -40,3 +40,6 @@
 
 // When idle, turn off Sentence Case after 2 seconds.
 #define SENTENCE_CASE_TIMEOUT 2000
+
+//configure how long to wait after last activity. 120000ms = 2 mins
+#define SCREENSAVE_DELAY 120000

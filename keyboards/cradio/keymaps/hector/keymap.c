@@ -38,6 +38,7 @@ enum custom_keycodes {
   MACRO11,
   MACRO12,
   MACRO13,
+  MACRO14,
   TD_Q_TAB = 0,
   TD_A_ESC,
   TD_ONEGR,
@@ -46,7 +47,7 @@ enum custom_keycodes {
   TD_WHOME,
   TD_EEND,
   TD_ENE,
-  TD_IINS
+  NO_SLEEP  //custom macro key.  turns on screensaver mode
 };
 
 #define KC_CAD LALT(LCTL(KC_DEL))
@@ -87,7 +88,6 @@ enum custom_keycodes {
 #define KC_ONEGR TD(TD_ONEGR)
 #define KC_EXTIL TD(TD_EXTIL)
 // RIGHT HAND
-#define KC_IINS TD(TD_IINS)
 #define KC_SCLQT TD(TD_SCLQT)
 #define KC_ENE TD(TD_ENE)
 
@@ -109,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [L_QWERTY] = LAYOUT_split_3x5_2(
   //--------------------------------------------.                    ,--------------------------------------------.
-     KC_QTAB,KC_WHOME, KC_EEND,   KC_R ,  KC_T  ,                       KC_Y  ,   KC_U , KC_IINS,  KC_O  ,  KC_P  ,
+     KC_QTAB,KC_WHOME, KC_EEND,   KC_R ,  KC_T  ,                       KC_Y  ,   KC_U ,  KC_I  ,  KC_O  ,  KC_P  ,
   //--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
      KC_AESC,  KC_S  ,  KC_D  ,   KC_F ,  KC_G  ,                       KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLQT,
   //--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
@@ -190,9 +190,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [L_ADJUST] = LAYOUT_split_3x5_2(
   //,-------------------------------------------.                    ,--------------------------------------------.
-     _______, _______, KC_END , _______, _______,                      MACRO1 , MACRO3 , MACRO4 , MACRO13, _______,
+     _______, _______, KC_END , _______, _______,                      MACRO1 , MACRO3 , MACRO4 , MACRO13,NO_SLEEP,
   //|-------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-     KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO2 , MACRO8 , _______, _______, _______,
+     KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO2 , MACRO8 , MACRO14, _______, _______,
   //|-------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
      _______, _______, _______, _______, _______,                      _______, _______, _______, _______, QK_BOOT,
   //|-------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
@@ -258,6 +258,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 combo_t key_combos[] = {};
 uint16_t COMBO_LEN = 0;
 
+bool stop_screensaver = false;     //screensaver mode status
+uint32_t last_activity_timer = 0;
+
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
   switch (keycode) {
     // Increase the tapping term a little for slower ring and pinky fingers.
@@ -301,6 +304,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
   if (!process_select_word(keycode, record, SELWORD)) {return false;}
   if (!process_sentence_case(keycode, record)) { return false; }
+
+  if (record->event.pressed) { stop_screensaver = false; }   //turn off screensaver mode on any keypress
 
   switch (keycode) {
     case MACRO1:
@@ -367,6 +372,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             SEND_STRING("B3l$nRv1zF3rn$nd3z");
         }
         return false;
+    case MACRO14:
+        if (record->event.pressed) {
+            SEND_STRING("Sonconato1");
+        }
+        return false;
     case SELLINE:
         if (record->event.pressed) {
             SEND_STRING(SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END)));
@@ -377,7 +387,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           SEND_STRING(SS_LCTL("ct") SS_DELAY(100) SS_LCTL("v") SS_TAP(X_ENTER));
         }
         return false;
-      break;
+    case NO_SLEEP:
+        if (record->event.pressed) {               //if NO_SLEEP is pressed
+            SEND_STRING("stop_screensaver");
+            stop_screensaver = !stop_screensaver;               //turn on screensaver mode
+            last_activity_timer = timer_read32();  //reset timer
+        }
+        return false;
+    break;
   }
   return true;
 }
@@ -392,7 +409,6 @@ bool caps_word_press_user(uint16_t keycode) {
         case KC_EEND:
         case KC_MINS:
         case KC_ENE:
-        case KC_IINS:
             add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
             return true;
 
@@ -482,7 +498,6 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_SCLQT] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_QUOT),
     [TD_WHOME] = ACTION_TAP_DANCE_DOUBLE(KC_W, KC_HOME),
     [TD_EEND] = ACTION_TAP_DANCE_DOUBLE(KC_E, KC_END),
-    [TD_IINS] = ACTION_TAP_DANCE_DOUBLE(KC_I, KC_INS),
     [TD_ENE] = ACTION_TAP_DANCE_DOUBLE(KC_N, RALT(KC_N)),
 };
 
@@ -490,4 +505,12 @@ void matrix_scan_user(void) {
   achordion_task();
   select_word_task();
   sentence_case_task();
+
+  if (stop_screensaver) {                                             //if screensaver mode is active
+      if (timer_elapsed32(last_activity_timer) > SCREENSAVE_DELAY) {  //and no key has been pressed in more than SCREENSAVE_DELAY ms
+          tap_code16(KC_MS_D);
+          tap_code16(KC_UP);
+          last_activity_timer = timer_read32();                       //  reset last_activity_timer
+      }
+  }
 }

@@ -38,6 +38,7 @@ enum custom_keycodes {
   MACRO11,
   MACRO12,
   MACRO13,
+  MACRO14,
   TD_Q_TAB = 0,
   TD_A_ESC,
   TD_ONEGR,
@@ -46,6 +47,7 @@ enum custom_keycodes {
   TD_WHOME,
   TD_EEND,
   TD_ENE,
+  NO_SLEEP  //custom macro key.  turns on screensaver mode
 };
 
 #define KC_CAD LALT(LCTL(KC_DEL))
@@ -189,9 +191,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [L_ADJUST] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, _______, _______, KC_END , _______, _______,                      MACRO1 , MACRO3 , MACRO4 , MACRO13, _______, _______,
+      _______, _______, _______, KC_END , _______, _______,                      MACRO1 , MACRO3 , MACRO4 , MACRO13,NO_SLEEP, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO2 , MACRO8 , _______, _______, _______, _______,
+      _______, KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO2 , MACRO8 , MACRO14, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, QK_BOOT, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -256,6 +258,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 combo_t key_combos[] = {};
 uint16_t COMBO_LEN = 0;
 
+bool stop_screensaver = false;     //screensaver mode status
+uint32_t last_activity_timer = 0;
+
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
   switch (keycode) {
     // Increase the tapping term a little for slower ring and pinky fingers.
@@ -300,7 +305,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!process_select_word(keycode, record, SELWORD)) {return false;}
   if (!process_sentence_case(keycode, record)) { return false; }
 
+  if (record->event.pressed) { stop_screensaver = false; }   //turn off screensaver mode on any keypress
+
   switch (keycode) {
+    case NO_SLEEP:
+        if (record->event.pressed) {               //if NO_SLEEP is pressed
+            SEND_STRING("stop_screensaver");
+            stop_screensaver = !stop_screensaver;               //turn on screensaver mode
+            last_activity_timer = timer_read32();  //reset timer
+        }
+        return false;
     case MACRO1:
         if (record->event.pressed) {
             SEND_STRING("B1tl0ck3r");
@@ -363,6 +377,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case MACRO13:
         if (record->event.pressed) {
             SEND_STRING("B3l$nRv1zF3rn$nd3z");
+        }
+        return false;
+    case MACRO14:
+        if (record->event.pressed) {
+            SEND_STRING("Sonconato1");
         }
         return false;
     case SELLINE:
@@ -486,4 +505,12 @@ void matrix_scan_user(void) {
   achordion_task();
   select_word_task();
   sentence_case_task();
+
+  if (stop_screensaver) {                                             //if screensaver mode is active
+      if (timer_elapsed32(last_activity_timer) > SCREENSAVE_DELAY) {  //and no key has been pressed in more than SCREENSAVE_DELAY ms
+          tap_code16(KC_MS_D);
+          tap_code16(KC_UP);
+          last_activity_timer = timer_read32();                       //  reset last_activity_timer
+      }
+  }
 }

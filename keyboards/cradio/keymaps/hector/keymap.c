@@ -390,11 +390,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case NO_SLEEP:
         if (record->event.pressed) {               //if NO_SLEEP is pressed
             SEND_STRING("stop_screensaver");
-            stop_screensaver = !stop_screensaver;               //turn on screensaver mode
+            stop_screensaver = !stop_screensaver;  //turn on screensaver mode
             last_activity_timer = timer_read32();  //reset timer
         }
         return false;
-    break;
+        break;
   }
   return true;
 }

@@ -308,13 +308,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) { stop_screensaver = false; }   //turn off screensaver mode on any keypress
 
   switch (keycode) {
-    case NO_SLEEP:
-        if (record->event.pressed) {               //if NO_SLEEP is pressed
-            SEND_STRING("stop_screensaver");
-            stop_screensaver = !stop_screensaver;               //turn on screensaver mode
-            last_activity_timer = timer_read32();  //reset timer
-        }
-        return false;
     case MACRO1:
         if (record->event.pressed) {
             SEND_STRING("B1tl0ck3r");
@@ -394,7 +387,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           SEND_STRING(SS_LCTL("ct") SS_DELAY(100) SS_LCTL("v") SS_TAP(X_ENTER));
         }
         return false;
-      break;
+    case NO_SLEEP:
+        if (record->event.pressed) {               //if NO_SLEEP is pressed
+            SEND_STRING("stop_screensaver");
+            stop_screensaver = !stop_screensaver;  //turn on screensaver mode
+            last_activity_timer = timer_read32();  //reset timer
+        }
+        return false;
+        break;
   }
   return true;
 }

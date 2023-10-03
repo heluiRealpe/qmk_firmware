@@ -3,7 +3,7 @@
 #include "features/achordion.h"
 #include "features/repeat_key.h"
 #include "features/select_word.h"
-#include "features/sentence_case.h"
+//#include "features/sentence_case.h"
 
 enum Layers{
     L_QWERTY, L_LOWER, L_RAISE, L_MOV, L_NUM, L_ADJUST
@@ -195,7 +195,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO2 , MACRO8 , MACRO14, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, QK_BOOT, _______,
+      _______, _______, _______, _______, _______, _______,                      _______, AC_TOGG, _______, _______, QK_BOOT, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,   _______, _______, _______
                                       //`--------------------------'  `--------------------------'
@@ -303,7 +303,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!process_achordion(keycode, record)) { return false; }
   if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
   if (!process_select_word(keycode, record, SELWORD)) {return false;}
-  if (!process_sentence_case(keycode, record)) { return false; }
+//  if (!process_sentence_case(keycode, record)) { return false; }
 
   if (record->event.pressed) { stop_screensaver = false; }   //turn off screensaver mode on any keypress
 
@@ -484,7 +484,7 @@ char sentence_case_press_user(uint16_t keycode, keyrecord_t* record,
   }
 
   // Otherwise clear Sentence Case to initial state.
-  sentence_case_clear();
+//  sentence_case_clear();
   return '\0';
 }
 
@@ -504,7 +504,7 @@ tap_dance_action_t tap_dance_actions[] = {
 void matrix_scan_user(void) {
   achordion_task();
   select_word_task();
-  sentence_case_task();
+//  sentence_case_task();
 
   if (stop_screensaver) {                                             //if screensaver mode is active
       if (timer_elapsed32(last_activity_timer) > SCREENSAVE_DELAY) {  //and no key has been pressed in more than SCREENSAVE_DELAY ms
@@ -513,4 +513,80 @@ void matrix_scan_user(void) {
           last_activity_timer = timer_read32();                       //  reset last_activity_timer
       }
   }
+}
+
+bool process_autocorrect_user(uint16_t *keycode, keyrecord_t *record, uint8_t *typo_buffer_size, uint8_t *mods) {
+    // See quantum_keycodes.h for reference on these matched ranges.
+    switch (*keycode) {
+        // Exclude these keycodes from processing.
+        case KC_LSFT:
+        case KC_RSFT:
+        case KC_CAPS:
+        case QK_TO ... QK_ONE_SHOT_LAYER_MAX:
+//        case QK_LAYER_TAP_TOGGLE ... QK_LAYER_MOD_MAX:
+        case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:
+            return false;
+
+        // Mask for base keycode from shifted keys.
+        case QK_LSFT ... QK_LSFT + 255:
+        case QK_RSFT ... QK_RSFT + 255:
+            if (*keycode >= QK_LSFT && *keycode <= (QK_LSFT + 255)) {
+                *mods |= MOD_LSFT;
+            } else {
+                *mods |= MOD_RSFT;
+            }
+            *keycode &= 0xFF; // Get the basic keycode.
+            return true;
+#ifndef NO_ACTION_TAPPING
+        // Exclude tap-hold keys when they are held down
+        // and mask for base keycode when they are tapped.
+        case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+#    ifdef NO_ACTION_LAYER
+            // Exclude Layer Tap, if layers are disabled
+            // but action tapping is still enabled.
+            return false;
+#    endif
+        case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+            // Exclude hold if mods other than Shift is not active
+            if (!record->tap.count) {
+                return false;
+            }
+            *keycode &= 0xFF;
+            break;
+#else
+        case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+        case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+            // Exclude if disabled
+            return false;
+#endif
+        // Exclude swap hands keys when they are held down
+        // and mask for base keycode when they are tapped.
+        case QK_SWAP_HANDS ... QK_SWAP_HANDS_MAX:
+#ifdef SWAP_HANDS_ENABLE
+            if (*keycode >= 0x56F0 || !record->tap.count) {
+                return false;
+            }
+            *keycode &= 0xFF;
+            break;
+#else
+            // Exclude if disabled
+            return false;
+#endif
+        // Handle custom keycodes
+        case L_LOWER:
+        case L_RAISE:
+        case L_MOV:
+        case L_NUM:
+        case L_ADJUST:
+            *typo_buffer_size = 0;
+            return false;
+    }
+
+    // Disable autocorrect while a mod other than shift is active.
+    if ((*mods & ~MOD_MASK_SHIFT) != 0) {
+        *typo_buffer_size = 0;
+        return false;
+    }
+
+    return true;
 }

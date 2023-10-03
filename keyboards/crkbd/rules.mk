@@ -12,12 +12,10 @@ RGBLIGHT_ENABLE = no        # Enable keyboard RGB underglow
 AUDIO_ENABLE = no           # Audio output
 RGB_MATRIX_ENABLE = no
 RGB_MATRIX_DRIVER = WS2812
-LTO_ENABLE = yes
-
 # if firmware size over limit, try this option
-# LTO_ENABLE = yes
+LTO_ENABLE = yes
 
 DEFAULT_FOLDER = crkbd/rev1
 
-RGBLIGHT_SUPPORTED = yes
-RGB_MATRIX_SUPPORTED = yes
+RGBLIGHT_SUPPORTED = no
+RGB_MATRIX_SUPPORTED = no

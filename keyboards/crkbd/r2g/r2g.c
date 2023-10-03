@@ -57,7 +57,12 @@ void oled_render_layer_state_r2g(void) {
         default:
             break;
     }
-    oled_write_ln_P(PSTR("    "), false);
+
+    if(autocorrect_is_enabled()){
+        oled_write_ln_P(PSTR("Auto-corrected"), false);
+    } else {
+        oled_write_ln_P(PSTR("    "), false);
+    }
 
     // Host Keyboard LED Status
     // mods
@@ -74,7 +79,7 @@ void oled_render_layer_state_r2g(void) {
         oled_write_ln_P(PSTR("GUI"), false);
     } else if(is_caps_word_on()){
         oled_write_ln_P(PSTR("CAPS WORD"), false);
-    }else {
+    } else {
         oled_write_ln_P(PSTR("    "), false);
     }
 }

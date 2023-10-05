@@ -59,7 +59,7 @@ void oled_render_layer_state_r2g(void) {
     }
 
     if(autocorrect_is_enabled()){
-        oled_write_ln_P(PSTR("auto-correct-mode"), false);
+        oled_write_ln_P(PSTR("autocorrect-mode"), false);
     } else {
         oled_write_ln_P(PSTR("    "), false);
     }

@@ -59,7 +59,7 @@ void oled_render_layer_state_r2g(void) {
     }
 
     if(autocorrect_is_enabled()){
-        oled_write_ln_P(PSTR("Auto-corrected"), false);
+        oled_write_ln_P(PSTR("auto-correct-mode"), false);
     } else {
         oled_write_ln_P(PSTR("    "), false);
     }
@@ -203,5 +203,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
   }
   return process_record_user(keycode, record);
 }
+
 #endif // OLED_ENABLE
 

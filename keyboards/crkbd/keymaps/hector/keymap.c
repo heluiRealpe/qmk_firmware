@@ -537,41 +537,41 @@ bool process_autocorrect_user(uint16_t *keycode, keyrecord_t *record, uint8_t *t
             }
             *keycode &= 0xFF; // Get the basic keycode.
             return true;
-#ifndef NO_ACTION_TAPPING
-        // Exclude tap-hold keys when they are held down
-        // and mask for base keycode when they are tapped.
-        case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
-#    ifdef NO_ACTION_LAYER
-            // Exclude Layer Tap, if layers are disabled
-            // but action tapping is still enabled.
-            return false;
-#    endif
-        case QK_MOD_TAP ... QK_MOD_TAP_MAX:
-            // Exclude hold if mods other than Shift is not active
-            if (!record->tap.count) {
-                return false;
-            }
-            *keycode &= 0xFF;
-            break;
-#else
-        case QK_MOD_TAP ... QK_MOD_TAP_MAX:
-        case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
-            // Exclude if disabled
-            return false;
-#endif
-        // Exclude swap hands keys when they are held down
-        // and mask for base keycode when they are tapped.
-        case QK_SWAP_HANDS ... QK_SWAP_HANDS_MAX:
-#ifdef SWAP_HANDS_ENABLE
-            if (*keycode >= 0x56F0 || !record->tap.count) {
-                return false;
-            }
-            *keycode &= 0xFF;
-            break;
-#else
-            // Exclude if disabled
-            return false;
-#endif
+//#ifndef NO_ACTION_TAPPING
+//        // Exclude tap-hold keys when they are held down
+//        // and mask for base keycode when they are tapped.
+//        case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+//#    ifdef NO_ACTION_LAYER
+//            // Exclude Layer Tap, if layers are disabled
+//            // but action tapping is still enabled.
+//            return false;
+//#    endif
+//        case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+//            // Exclude hold if mods other than Shift is not active
+//            if (!record->tap.count) {
+//                return false;
+//            }
+//            *keycode &= 0xFF;
+//            break;
+//#else
+//        case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+//        case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+//            // Exclude if disabled
+//            return false;
+//#endif
+//        // Exclude swap hands keys when they are held down
+//        // and mask for base keycode when they are tapped.
+//        case QK_SWAP_HANDS ... QK_SWAP_HANDS_MAX:
+//#ifdef SWAP_HANDS_ENABLE
+//            if (*keycode >= 0x56F0 || !record->tap.count) {
+//                return false;
+//            }
+//            *keycode &= 0xFF;
+//            break;
+//#else
+//            // Exclude if disabled
+//            return false;
+//#endif
         // Handle custom keycodes
         case L_LOWER:
         case L_RAISE:
@@ -580,6 +580,37 @@ bool process_autocorrect_user(uint16_t *keycode, keyrecord_t *record, uint8_t *t
         case L_ADJUST:
             *typo_buffer_size = 0;
             return false;
+
+        case KC_QTAB:
+            *keycode = KC_Q;
+            return true;
+        case KC_WHOME:
+            *keycode = KC_W;
+            return true;
+        case KC_EEND:
+            *keycode = KC_E;
+            return true;
+        case KC_AESC:
+            *keycode = KC_A;
+            return true;
+        case LSHIFT_Z:
+            *keycode = KC_Z;
+            return true;
+        case LCTRL_X:
+            *keycode = KC_X;
+            return true;
+        case LALT_C:
+            *keycode = KC_C;
+            return true;
+        case LGUI_V:
+            *keycode = KC_V;
+            return true;
+        case KC_ENE:
+            *keycode = KC_N;
+            return true;
+        case RGUIL_M:
+            *keycode = KC_M;
+            return true;
     }
 
     // Disable autocorrect while a mod other than shift is active.

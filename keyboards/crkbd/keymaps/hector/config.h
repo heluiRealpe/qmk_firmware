@@ -9,8 +9,6 @@
 // Tap-hold configuration for home row mods.
 #define TAPPING_TERM 175
 #define TAPPING_TERM_PER_KEY
-// NOT NECESSARY
-//#define IGNORE_MOD_TAP_INTERRUPT
 #define PERMISSIVE_HOLD
 #define SENTENCE_CASE_BUFFER_SIZE 10
 

@@ -31,9 +31,6 @@
 #define MOUSEKEY_WHEEL_MAX_SPEED 10
 #define MOUSEKEY_WHEEL_TIME_TO_MAX 9
 
-// When idle, turn off Caps Word after 5 seconds.
-#define CAPS_WORD_IDLE_TIMEOUT 5000
-
 // When idle, turn off Select Word after 2 seconds.
 #define SELECT_WORD_TIMEOUT 2000
 
@@ -42,3 +39,8 @@
 
 //configure how long to wait after last activity. 120000ms = 2 mins
 #define SCREENSAVE_DELAY 120000
+
+#define NO_ALT_REPEAT_KEY
+
+#define CAPS_WORD_INVERT_ON_SHIFT
+#define CAPS_WORD_IDLE_TIMEOUT 3000  // 3 seconds.

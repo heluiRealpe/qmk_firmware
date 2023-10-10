@@ -1,7 +1,6 @@
 #include QMK_KEYBOARD_H
 
 #include "features/achordion.h"
-#include "features/repeat_key.h"
 #include "features/select_word.h"
 #include "features/sentence_case.h"
 
@@ -10,8 +9,7 @@ enum Layers{
 };
 
 enum custom_keycodes {
-  REPEAT = SAFE_RANGE,
-  SELWORD,
+  SELWORD = SAFE_RANGE,
   SELLINE,
   SRCHSEL,
   QWERTY,
@@ -138,7 +136,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //---------------------------------------------.                    ,--------------------------------------------.
      KC_ONEGR,  KC_2  , KC_3   , KC_4   , KC_5   ,                      KC_6   , KC_7   , KC_8   , KC_9   , KC_0   ,
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-      KC_ESC , LALTTAB, RCTRTAB, REPEAT , KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC,
+      KC_ESC , LALTTAB, RCTRTAB, QK_REP , KC_TAB ,                      KC_BSLS, KC_MINS, KC_EQL , KC_LBRC, KC_RBRC,
   //+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       UNDO   , CUT    , COPY   , PASTE  , REDO   ,                      KC_CAPS, CW_TOGG,LALT_COM, KC_DOT ,KC_SLASH,
   //+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
@@ -301,7 +299,6 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t* record) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   if (!process_achordion(keycode, record)) { return false; }
-  if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
   if (!process_select_word(keycode, record, SELWORD)) {return false;}
   if (!process_sentence_case(keycode, record)) { return false; }
 
@@ -513,4 +510,76 @@ void matrix_scan_user(void) {
           last_activity_timer = timer_read32();                       //  reset last_activity_timer
       }
   }
+}
+
+bool process_autocorrect_user(uint16_t *keycode, keyrecord_t *record, uint8_t *typo_buffer_size, uint8_t *mods) {
+    // See quantum_keycodes.h for reference on these matched ranges.
+    switch (*keycode) {
+        // Exclude these keycodes from processing.
+        case KC_LSFT:
+        case KC_RSFT:
+        case KC_CAPS:
+        case QK_TO ... QK_ONE_SHOT_LAYER_MAX:
+//        case QK_LAYER_TAP_TOGGLE ... QK_LAYER_MOD_MAX:
+        case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:
+            return false;
+
+        // Mask for base keycode from shifted keys.
+        case QK_LSFT ... QK_LSFT + 255:
+        case QK_RSFT ... QK_RSFT + 255:
+            if (*keycode >= QK_LSFT && *keycode <= (QK_LSFT + 255)) {
+                *mods |= MOD_LSFT;
+            } else {
+                *mods |= MOD_RSFT;
+            }
+            *keycode &= 0xFF; // Get the basic keycode.
+            return true;
+        // Handle custom keycodes
+        case L_LOWER:
+        case L_RAISE:
+        case L_MOV:
+        case L_NUM:
+        case L_ADJUST:
+            *typo_buffer_size = 0;
+            return false;
+
+        case KC_QTAB:
+            *keycode = KC_Q;
+            return true;
+        case KC_WHOME:
+            *keycode = KC_W;
+            return true;
+        case KC_EEND:
+            *keycode = KC_E;
+            return true;
+        case KC_AESC:
+            *keycode = KC_A;
+            return true;
+        case LSHIFT_Z:
+            *keycode = KC_Z;
+            return true;
+        case LCTRL_X:
+            *keycode = KC_X;
+            return true;
+        case LALT_C:
+            *keycode = KC_C;
+            return true;
+        case LGUI_V:
+            *keycode = KC_V;
+            return true;
+        case KC_ENE:
+            *keycode = KC_N;
+            return true;
+        case RGUIL_M:
+            *keycode = KC_M;
+            return true;
+    }
+
+    // Disable autocorrect while a mod other than shift is active.
+    if ((*mods & ~MOD_MASK_SHIFT) != 0) {
+        *typo_buffer_size = 0;
+        return false;
+    }
+
+    return true;
 }

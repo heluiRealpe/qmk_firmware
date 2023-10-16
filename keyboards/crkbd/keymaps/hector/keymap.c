@@ -370,8 +370,6 @@ bool caps_word_press_user(uint16_t keycode) {
 }
 
 bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, uint16_t other_keycode, keyrecord_t* other_record) {
-  // Also allow same-hand holds when the other key is in the rows below the
-  // alphas. I need the `% (MATRIX_ROWS / 2)` because my keyboard is split.
   if (other_record->event.key.row % (MATRIX_ROWS / 2) >= 4) {
     return true;
   }
@@ -428,8 +426,6 @@ char sentence_case_press_user(uint16_t keycode, keyrecord_t* record,
     }
   }
 
-  // Otherwise clear Sentence Case to initial state.
-//  sentence_case_clear();
   return '\0';
 }
 
@@ -448,12 +444,9 @@ tap_dance_action_t tap_dance_actions[] = {
 
 void matrix_scan_user(void) {
   achordion_task();
-//  select_word_task();
-//  sentence_case_task();
 
   if (stop_screensaver) {                                             //if screensaver mode is active
       if (timer_elapsed32(last_activity_timer) > SCREENSAVE_DELAY) {  //and no key has been pressed in more than SCREENSAVE_DELAY ms
-          tap_code16(KC_MS_D);
           tap_code16(KC_UP);
           last_activity_timer = timer_read32();                       //  reset last_activity_timer
       }
@@ -531,3 +524,86 @@ bool process_autocorrect_user(uint16_t *keycode, keyrecord_t *record, uint8_t *t
 
     return true;
 }
+
+#ifdef OLED_ENABLE
+
+void oled_render_layer_state_r2g(void) {
+
+    oled_write_ln_P(PSTR("    "), false);
+    oled_write_P(PSTR("Layer: "), false);
+    uint8_t layer = get_highest_layer(layer_state);
+    switch (layer) {
+        case L_QWERTY:
+            oled_write_ln_P(PSTR("Q W E R T Y"), false);
+            break;
+        case L_LOWER:
+            oled_write_ln_P(PSTR("L O W E R"), false);
+            break;
+        case L_RAISE:
+            oled_write_ln_P(PSTR("R A I S E"), false); break;
+        case L_MOV:
+            oled_write_ln_P(PSTR("M O U S E"), false);
+            break;
+        case L_NUM:
+            oled_write_ln_P(PSTR("FrOw & MaCrOs"), false);
+            break;
+        case L_ADJUST:
+            oled_write_ln_P(PSTR("A D J U S T"), false);
+            break;
+        default:
+            break;
+    }
+
+//    if(autocorrect_is_enabled()){
+//        oled_write_ln_P(PSTR("autocorrect-mode"), false);
+//    } else {
+//        oled_write_ln_P(PSTR("    "), false);
+//    }
+
+    // Host Keyboard LED Status
+    // mods
+    led_t led_state = host_keyboard_led_state();
+    if(led_state.caps_lock){
+        oled_write_ln_P(PSTR("CAPS LOCK"), false);
+    } else if(get_mods() & MOD_MASK_SHIFT) {
+        oled_write_ln_P(PSTR("SHIFT"), false);
+    } else if(get_mods() & MOD_MASK_CTRL){
+        oled_write_ln_P(PSTR("CTRL"), false);
+    } else if(get_mods() & MOD_MASK_ALT){
+        oled_write_ln_P(PSTR("ALT"), false);
+    } else if(get_mods() & MOD_MASK_GUI){
+        oled_write_ln_P(PSTR("GUI"), false);
+    } else if(is_caps_word_on()){
+        oled_write_ln_P(PSTR("CAPS WORD"), false);
+    } else {
+        oled_write_ln_P(PSTR("    "), false);
+    }
+}
+
+
+void render_bootmagic_status_r2g(bool status) {
+    /* Show Ctrl-Gui Swap options */
+    static const char PROGMEM logo[][2][3] = {
+        {{0x97, 0x98, 0}, {0xb7, 0xb8, 0}},
+        {{0x95, 0x96, 0}, {0xb5, 0xb6, 0}},
+    };
+    if (status) {
+        oled_write_ln_P(logo[0][0], false);
+        oled_write_ln_P(logo[0][1], false);
+    } else {
+        oled_write_ln_P(logo[1][0], false);
+        oled_write_ln_P(logo[1][1], false);
+    }
+}
+
+bool oled_task_user(void) {
+  if (is_keyboard_master()) {
+    oled_render_layer_state_r2g();
+    return false;
+  } else {
+    return true;
+  }
+}
+
+#endif // OLED_ENABLE
+

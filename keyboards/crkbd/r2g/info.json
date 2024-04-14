@@ -1,6 +1,6 @@
 {
     "features": {
-        "rgb_matrix": true
+        "rgb_matrix": false
     },
     "split": {
         "soft_serial_pin": "D2",

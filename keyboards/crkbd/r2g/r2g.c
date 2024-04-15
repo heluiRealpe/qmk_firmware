@@ -58,11 +58,7 @@ void oled_render_layer_state_r2g(void) {
             break;
     }
 
-    if(autocorrect_is_enabled()){
-        oled_write_ln_P(PSTR("autocorrect-mode"), false);
-    } else {
-        oled_write_ln_P(PSTR("    "), false);
-    }
+    oled_write_ln_P(PSTR("    "), false);
 
     // Host Keyboard LED Status
     // mods

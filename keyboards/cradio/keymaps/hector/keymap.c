@@ -2,6 +2,7 @@
 
 #include "features/achordion.h"
 #include "features/repeat_key.h"
+#include "features/orbital_mouse.h"
 #include "features/select_word.h"
 #include "features/sentence_case.h"
 
@@ -194,7 +195,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|-------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
      KC_HOME, _______, KC_BRIU, KC_BRID, _______,                      MACRO13, MACRO8 , MACRO14, _______, _______,
   //|-------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-     _______, _______, _______, _______, _______,                      _______, _______, _______, _______, QK_BOOT,
+     _______, _______, _______, _______, _______,                      _______, AC_TOGG, _______, _______, QK_BOOT,
   //|-------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
                                          _______, _______,    _______, _______
                                       //`----------------'  `-----------------'
@@ -217,9 +218,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [L_NUM] = LAYOUT_split_3x5_2(
   //,--------------------------------------------.                    ,--------------------------------------------.
-      KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                      MACRO12, MACRO9 , MACRO10, KC_DEL , KC_BSPC,
+      KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                      OM_DBLS, OM_BTN2,  OM_U  , KC_DEL , KC_BSPC,
   //|--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
-      KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 ,                      MACRO11, MACRO5 , MACRO6 , MACRO7 , KC_QUOT,
+      KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 ,                      OM_BTNS,   OM_L ,  OM_D  ,  OM_R  , KC_QUOT,
   //|--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       KC_F11 , KC_F12 , _______, _______, _______,                      SRCHSEL, SELWORD, SELLINE, _______, _______,
   //|--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
@@ -301,9 +302,10 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t* record) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   if (!process_achordion(keycode, record)) { return false; }
+  if (!process_sentence_case(keycode, record)) { return false; }
   if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
   if (!process_select_word(keycode, record, SELWORD)) {return false;}
-  if (!process_sentence_case(keycode, record)) { return false; }
+  if (!process_orbital_mouse(keycode, record)) { return false; }
 
   if (record->event.pressed) { stop_screensaver = false; }   //turn off screensaver mode on any keypress
 
@@ -503,6 +505,7 @@ tap_dance_action_t tap_dance_actions[] = {
 
 void matrix_scan_user(void) {
   achordion_task();
+  orbital_mouse_task();
   select_word_task();
   sentence_case_task();
 
